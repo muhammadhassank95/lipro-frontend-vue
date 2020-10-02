@@ -1,0 +1,45 @@
+
+body {
+    background-color: #eee;
+}
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.white-block {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #214764;
+    padding: 16px 20px;
+    color: #fff;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.right-side {
+    display: flex;
+    align-items: center;
+}
+
+.header button {
+    color: #fff !important;
+    text-transform: capitalize;
+}
