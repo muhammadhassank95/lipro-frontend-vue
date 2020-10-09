@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Login from '../views/Login';
 import ConsultantPlan from '../views/ConsultantPlan';
 import User from '../views/User';
+import Country from '../views/Country';
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,11 @@ const routes = [
     path: '/users',
     name: 'User',
     component: User,
+  },
+  {
+    path: '/add-country',
+    name: 'Countries',
+    component: Country,
   },
   {
     path: '/consultant_plan',

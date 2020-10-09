@@ -1,7 +1,29 @@
 
 body {
-    background-color: #eee;
+    background-color: #eee !important;
 }
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    list-style: none;
+}
+
+a {
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+    position: absolute;
+    right: 0;
+    font-size: 12px;
+    bottom: -20px;
+}
+
 .container {
     max-width: 1280px;
     margin: 0 auto;
@@ -15,10 +37,16 @@ body {
     justify-content: center;
 }
 
+.login-heading {
+    text-align: center;
+    margin: 30px 0;
+}
+
 .white-block {
     background-color: white;
     padding: 20px;
-    margin: 20px 0;
+    max-width: 600px;
+    margin: 20px auto 40px auto;
 }
 
 .header {
@@ -37,6 +65,22 @@ body {
 .right-side {
     display: flex;
     align-items: center;
+}
+
+.left-side {
+    min-width: 256px;
+}
+
+.loader {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 91px;
+    bottom: 0;
+    background-color: rgb(255 255 255 / 22%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .header button {
