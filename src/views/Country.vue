@@ -1,22 +1,14 @@
 <template>
   <div class="container-fluid">
-    <div class="md-layout md-gutter">
-      <div class="md-layout-item md-medium-size-30 md-small-size-50 md-xsmall-size-100">
+    <div v-if="loader === false" class="md-layout md-gutter">
+      <div class="md-layout-item md-medium-size-25 md-small-size-50 md-xsmall-size-100">
         <input
           id="bd-search-input"
           type="search"
           placeholder="Search..."
-          autocomplete="off"
-          aria-label="Search docs"
           class="form-control ds-input"
-          spellcheck="false"
-          role="combobox"
-          aria-autocomplete="list"
-          aria-expanded="false"
-          aria-owns="algolia-autocomplete-listbox-0"
-          dir="auto"
+          @change="filterCountry"
           v-model="search"
-          @blur="filterCountry()"
           style="position: relative; vertical-align: top; margin-top: 10px;"
         />
         <a href="javascript:void(0)" @click="onNewCountry">New Country</a>
@@ -29,8 +21,27 @@
       </div>
       <div class="md-layout-item md-medium-size-70 md-small-size-50 md-xsmall-size-100">
         <md-field>
-          <label>Add New Country</label>
+          <label>Country</label>
           <md-input v-model="country"></md-input>
+          <div
+            class="error"
+            v-if="!$v.country.required && submitStatus === 'ERROR'"
+          >Last Name is required</div>
+          <div
+            v-if="!$v.country.minLength && submitStatus === 'ERROR'"
+            class="error"
+            style="color: red;"
+          >Last Name must have at least {{$v.country.$params.minLength.min}} letters.</div>
+          <div
+            class="success-message"
+            v-if="submitStatus === 'UPDATED' "
+          >Country Updated sucessfully</div>
+          <div class="success-message" v-if="submitStatus === 'ADDED' ">Country Added successfully</div>
+          <div
+            class="success-message"
+            v-if="submitStatus === 'DELETED' "
+          >Country Deleted sucessfully</div>
+          <div class="error" v-if="submitStatus === 'UPDATION ERROR'">This Name Already exists</div>
         </md-field>
         <md-card-actions v-if="showActionButtons">
           <md-button @click="updateCountry" type="submit" class="md-primary">Update</md-button>
@@ -41,11 +52,15 @@
         </md-card-actions>
       </div>
     </div>
+    <div v-if="loader === true" class="loader">
+      <vue-loaders-ball-clip-rotate color="blue" scale="1"></vue-loaders-ball-clip-rotate>
+    </div>
   </div>
 </template>
 
 <script>
 import GlobalService from "../services/global-service";
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   name: "Country",
@@ -56,6 +71,9 @@ export default {
       showActionButtons: false,
       search: undefined,
       filtered: undefined,
+      countryId: undefined,
+      submitStatus: "",
+      loader: false,
     };
   },
   async created() {
@@ -63,40 +81,90 @@ export default {
   },
   methods: {
     filterCountry() {
-      // return this.postList.filter(post => {
-      //         return post.title.toLowerCase().includes(this.search.toLowerCase())
-      //       })
-      //     }
-      //   }
-
-      // console.log(this.getAllCountries.length);
-      this.filtered = this.getAllCountries.filter((c) => {
-        return c.country.includes(this.search);
-      });
-      console.log(this.filtered);
+      console.log(this.search);
+      if (this.search.length > 1) {
+        GlobalService.searchCountry(this.search).then((res) => {
+          this.getAllCountries = res;
+          console.log("resresres1111:", res);
+        });
+      } else {
+        this.fetchAllCountries();
+      }
+      // this.$search(this.search, this.getAllCountries, "").then((results) => {
+      //   console.log("results: ", results);
+      //   this.search = results;
+      // });
     },
-    updateCountry() {
-      console.log("updated");
-    },
-    deleteCountry() {
-      console.log("deleted");
-    },
-    async fetchAllCountries() {
-      this.getAllCountries = await GlobalService.getCountries();
+    fetchAllCountries() {
+      this.loader = true;
+      GlobalService.getCountries()
+        .then((res) => {
+          this.loader = false;
+          this.getAllCountries = res;
+        })
+        .catch(() => {
+          this.loader = false;
+        });
     },
     addNewCountry() {
+      this.loader = true;
       GlobalService.createCountry(this.country)
         .then(() => {
+          this.loader = false;
+          this.submitStatus = "ADDED";
           this.fetchAllCountries();
+          this.country = "";
         })
-        .catch((e) => console.log(e));
+        .catch((e) => {
+          this.loader = false;
+          this.submitStatus = "ERROR";
+          console.log(e);
+        });
     },
     onNewCountry() {
+      this.submitStatus = "";
+      this.showActionButtons = false;
       this.country = "";
     },
     onCountryFilled(c) {
       this.showActionButtons = true;
+      this.submitStatus = "";
+      this.countryId = c._id;
       this.country = c.country;
+    },
+    updateCountry() {
+      this.loader = true;
+      GlobalService.updateCountry(this.countryId, this.country)
+        .then(() => {
+          this.loader = false;
+          this.submitStatus = "UPDATED";
+          this.fetchAllCountries();
+        })
+        .catch(() => {
+          this.loader = false;
+          this.submitStatus = "UPDATION ERROR";
+        });
+    },
+    deleteCountry() {
+      this.loader = true;
+      GlobalService.deleteCountry(this.countryId)
+        .then(() => {
+          this.showActionButtons = false;
+          this.loader = false;
+          this.submitStatus = "DELETED";
+          this.fetchAllCountries();
+          this.country = "";
+        })
+        .catch(() => {
+          this.loader = false;
+          this.submitStatus = "ERROR";
+        });
+    },
+  },
+  validations: {
+    country: {
+      required,
+      minLength: minLength(2),
     },
   },
 };

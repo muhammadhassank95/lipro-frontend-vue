@@ -10,12 +10,11 @@
           <hr />
           <ul class="list-group">
             <li v-for="users in getAllUsers" :key="users._id" @click="onUserFilled(users)">
-              <a class="list-group-item">{{users.firstname}} {{users.lastname}}</a>
+              <a class="list-group-item">{{users.loginname}}</a>
             </li>
           </ul>
         </div>
       </div>
-
       <div
         v-if="loader === false"
         class="md-layout-item md-medium-size-70 md-small-size-50 md-xsmall-size-100"
@@ -73,10 +72,9 @@
             </md-field>
             <div class="my-2 w-100">
               <label for="active_checkbox" class="d-flex align-items-center">
-                <input class="mr-2" id="active_checkbox" type="checkbox" v-model="active" /> Active
+                <input class="mr-2" id="active_checkbox" type="checkbox" checked v-model="active" /> Active
               </label>
             </div>
-
             <div class="row md-layout md-gutter">
               <div class="col-md-12">
                 <label>Entry</label>
@@ -94,7 +92,7 @@
               <div
                 class="error"
                 v-if="!$v.loginname.required && submitStatus === 'ERROR'"
-              >First Name is required</div>
+              >Abbreviation is required</div>
               <div
                 v-if="!$v.loginname.minLength && submitStatus === 'ERROR'"
                 class="error"
@@ -132,7 +130,6 @@
                 <md-option value="5f68c0fd7067ce9213ff1e7f">Personal</md-option>
               </md-select>
             </md-field>
-
             <md-field>
               <label>Street</label>
               <md-input v-model="street"></md-input>
@@ -152,10 +149,6 @@
                 class="error"
                 v-if="!$v.email.required && submitStatus === 'ERROR'"
               >Email is required.</div>
-            </md-field>
-            <md-field>
-              <label>Consent of security</label>
-              <md-input disabled></md-input>
             </md-field>
             <md-field>
               <label>Password</label>
@@ -180,7 +173,15 @@
             <div>
               <p class="error" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
             </div>
-            <md-card-actions>
+            <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated sucessfully</div>
+            <div class="success-message" v-if="submitStatus === 'ADDED'">User Added sucessfully</div>
+            <div class="success-message" v-if="submitStatus === 'DELETED' ">User Deleted sucessfully</div>
+            <div class="error" v-if="submitStatus === 'UPDATION ERROR'">This Name Already exists</div>
+            <md-card-actions v-if="showActionButtons">
+              <md-button @click="updateUser" type="submit" class="md-primary">Update</md-button>
+              <md-button @click="deleteUser" type="submit" class="md-primary">Delete</md-button>
+            </md-card-actions>
+            <md-card-actions v-else>
               <md-button type="submit" class="md-primary">Create user</md-button>
             </md-card-actions>
           </form>
@@ -193,8 +194,6 @@
   </div>
 </template>
 <script>
-// import UserSideBar from "../components/UserSideBar";
-// import UserMid from "../components/UserMid";
 import UserService from "../services/user-service";
 import GlobalService from "../services/global-service";
 import moment from "moment";
@@ -206,12 +205,11 @@ export default {
   components: {},
   data() {
     return {
-      full_name: undefined,
       lastname: "",
       firstname: "",
       salutation: undefined,
       title: undefined,
-      active: undefined,
+      active: true,
       categoryId: undefined,
       consultant_function_id: undefined,
       zipCode: undefined,
@@ -224,17 +222,17 @@ export default {
       street: undefined,
       countryId: undefined,
       city: undefined,
-      daclarationagreed: undefined,
       countries: undefined,
       getAllUsers: undefined,
       submitStatus: null,
       loader: false,
+      showActionButtons: false,
+      userId: undefined,
     };
   },
   async mounted() {
     this.fetchAllUsers();
     this.countries = await GlobalService.getCountries();
-    console.log(this.countries);
   },
   methods: {
     async fetchAllUsers() {
@@ -243,12 +241,13 @@ export default {
       this.loader = false;
     },
     onNewUser() {
+      this.showActionButtons = false;
       this.email = undefined;
       this.firstname = "";
       this.lastname = "";
       this.salutation = undefined;
       this.title = undefined;
-      this.active = undefined;
+      this.active = true;
       this.startdate = undefined;
       this.enddate = undefined;
       this.loginname = undefined;
@@ -258,14 +257,12 @@ export default {
       this.street = undefined;
       this.zipCode = undefined;
       this.city = undefined;
-      this.change_right = undefined;
-      this.is_first_login = undefined;
-      this.daclarationagreed = undefined;
-      this.full_name = undefined;
       this.password = undefined;
       this.confirm_password = undefined;
     },
     onUserFilled(user) {
+      this.userId = user._id;
+      this.showActionButtons = true;
       this.email = user.mail;
       this.firstname = user.firstname;
       this.lastname = user.lastname;
@@ -281,16 +278,11 @@ export default {
       this.street = user.street;
       this.zipCode = user.zipcode;
       this.city = user.city;
-      this.change_right = user.change_right;
-      this.is_first_login = user.is_first_login;
-      this.daclarationagreed = user.daclarationagreed;
-      this.full_name = user.full_name;
       this.password = user.password;
       this.confirm_password = user.confirm_password;
     },
     signup() {
       this.$v.$touch();
-      this.full_name = `${this.firstname} ${this.lastname}`;
       this.loader = true;
       UserService.signup(
         this.email,
@@ -308,22 +300,63 @@ export default {
         this.street,
         this.zipCode,
         this.city,
-        (this.change_right = true),
-        (this.is_first_login = true),
-        this.daclarationagreed,
-        this.full_name,
         this.password,
         this.confirm_password
       )
-        .then((res) => {
-          this.fetchAllUsers();
+        .then(() => {
           this.loader = false;
-          console.log(res);
+          this.fetchAllUsers();
         })
-        .catch((e) => {
+        .catch(() => {
           this.loader = false;
           this.submitStatus = "ERROR";
-          console.log(e);
+        });
+    },
+    updateUser() {
+      // this.$v.$touch();
+      this.loader = true;
+      UserService.updateUserApi(
+        this.userId,
+        this.email,
+        this.firstname,
+        this.lastname,
+        this.salutation,
+        this.title,
+        this.active,
+        this.startdate,
+        this.enddate,
+        this.loginname,
+        this.categoryId,
+        this.consultant_function_id,
+        this.countryId,
+        this.street,
+        this.zipCode,
+        this.city,
+        this.password,
+        this.confirm_password
+      )
+        .then(() => {
+          this.loader = false;
+          this.submitStatus = "UPDATED";
+          this.fetchAllUsers();
+        })
+        .catch(() => {
+          this.loader = false;
+          this.submitStatus = "UPDATION ERROR";
+        });
+    },
+    deleteUser() {
+      UserService.deleteUserApi(this.userId)
+        .then(() => {
+          this.showActionButtons = false;
+          this.loader = false;
+          this.submitStatus = "DELETED";
+          this.fetchAllUsers();
+          // this.user = "";
+        })
+        .catch(() => {
+          this.loader = false;
+          this.submitStatus = "ERROR";
         });
     },
   },

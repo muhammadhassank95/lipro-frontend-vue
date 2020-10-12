@@ -21,9 +21,11 @@ import VueMoment from 'vue-moment';
 import Vuelidate from 'vuelidate';
 import VueMaterial from 'vue-material';
 import VueLoaders from 'vue-loaders';
+import VueFuse from 'vue-fuse';
 
 Vue.config.productionTip = false;
 
+Vue.use(VueFuse);
 Vue.use(VueLoaders);
 Vue.use(Vuelidate);
 Vue.use(VueResource);

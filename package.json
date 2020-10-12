@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
+    "vue-fuse": "^2.2.1",
     "vue-loaders": "^4.1.1",
     "vue-material": "^1.0.0-beta-15",
     "vue-moment": "^4.1.0",

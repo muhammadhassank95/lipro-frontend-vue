@@ -1,35 +1,47 @@
 <template>
   <div class="container">
-    <div class="login-heading">
-      <h6 for>Willkommen beim Lipro-System 4.0</h6>
-      <h5 for>Lischke Consulting GmbH</h5>
-    </div>
-    <div class="white-block">
-      <md-field>
-        <label>Login Name</label>
-        <md-input v-model="loginname"></md-input>
-        <div class="error" v-if="!$v.loginname.required ">Login Name is required</div>
-        <div
-          v-if="!$v.loginname.minLength"
-          class="error"
-          style="color: red;"
-        >Login Name must have at least {{$v.loginname.$params.minLength.min}} letters.</div>
-      </md-field>
+    <div v-if="loader === false">
+      <div class="login-heading">
+        <h6 for>Willkommen beim Lipro-System 4.0</h6>
+        <h5 for>Lischke Consulting GmbH</h5>
+      </div>
+      <div class="white-block">
+        <md-field>
+          <label>Login Name</label>
+          <md-input v-model="loginname"></md-input>
+          <div
+            class="error"
+            v-if="!$v.loginname.required && submitStatus === 'ERROR'"
+          >Login Name is required</div>
+          <div
+            v-if="!$v.loginname.minLength && submitStatus === 'ERROR'"
+            class="error"
+            style="color: red;"
+          >Login Name must have at least {{$v.loginname.$params.minLength.min}} letters.</div>
+        </md-field>
 
-      <md-field>
-        <label>Password</label>
-        <md-input type="password" v-model="password"></md-input>
-        <div class="error" v-if="!$v.password.required">Password is required</div>
-        <div
-          v-if="!$v.password.minLength"
-          class="error"
-          style="color: red;"
-        >Password must have at least {{$v.password.$params.minLength.min}} letters.</div>
-      </md-field>
+        <md-field>
+          <label>Password</label>
+          <md-input type="password" v-model="password"></md-input>
+          <div
+            class="error"
+            v-if="!$v.password.required && submitStatus === 'ERROR'"
+          >Password is required</div>
+          <div
+            v-if="!$v.password.minLength && submitStatus === 'ERROR'"
+            class="error"
+            style="color: red;"
+          >Password must have at least {{$v.password.$params.minLength.min}} letters.</div>
+        </md-field>
+      </div>
+      <div v-if="submitStatus === 'ERROR'">{{ errorMessage }}</div>
+      <div class="action-btn">
+        <md-button @click="login" class="md-dense md-raised md-primary">Login</md-button>
+        <md-button class="md-dense md-raised md-primary">Forgot Password</md-button>
+      </div>
     </div>
-    <div class="action-btn">
-      <md-button @click="login" class="md-dense md-raised md-primary">Login</md-button>
-      <md-button class="md-dense md-raised md-primary">Forgot Password`</md-button>
+    <div v-if="loader === true" class="loader">
+      <vue-loaders-ball-clip-rotate color="blue" scale="1"></vue-loaders-ball-clip-rotate>
     </div>
   </div>
 </template>
@@ -46,8 +58,9 @@ export default {
     return {
       password: "",
       loginname: "",
-      // submitStatus: "",
+      submitStatus: "",
       loader: false,
+      errorMessage: undefined,
     };
   },
   methods: {
@@ -64,7 +77,8 @@ export default {
         })
         .catch((e) => {
           this.loader = false;
-          // this.submitStatus = "ERROR";
+          this.submitStatus = "ERROR";
+          this.errorMessage = e.bodyText;
           console.log(e);
         });
     },
