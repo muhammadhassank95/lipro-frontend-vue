@@ -171,7 +171,7 @@
               >Passwords must be identical.</div>
             </md-field>
             <div>
-              <p class="error" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
+              <p class="error-form" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
             </div>
             <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated successfully</div>
             <div class="success-message" v-if="submitStatus === 'ADDED'">User Added successfully</div>

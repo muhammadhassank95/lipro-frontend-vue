@@ -34,7 +34,7 @@
           >Password must have at least {{$v.password.$params.minLength.min}} letters.</div>
         </md-field>
       </div>
-      <div v-if="submitStatus === 'ERROR'">{{ errorMessage }}</div>
+      <div v-if="submitStatus === 'ERROR'" class="error-form">{{ errorMessage }}</div>
       <div class="action-btn">
         <md-button @click="login" class="md-dense md-raised md-primary">Login</md-button>
         <md-button class="md-dense md-raised md-primary">Forgot Password</md-button>
@@ -79,7 +79,6 @@ export default {
           this.loader = false;
           this.submitStatus = "ERROR";
           this.errorMessage = e.bodyText;
-          console.log(e);
         });
     },
   },

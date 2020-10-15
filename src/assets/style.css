@@ -16,6 +16,14 @@ a {
     cursor: pointer;
 }
 
+
+.error-form {
+    right: -310px;
+    position: relative;
+    padding-bottom: 50px;
+    color: red;
+}
+
 .error {
     color: red;
     position: absolute;

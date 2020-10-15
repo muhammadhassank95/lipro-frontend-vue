@@ -7,7 +7,7 @@
           type="search"
           placeholder="Search..."
           class="form-control ds-input"
-          @change="filterCountry"
+          @blur="filterCountry"
           v-model="search"
           style="position: relative; vertical-align: top; margin-top: 10px;"
         />
@@ -30,7 +30,6 @@
           <div
             v-if="!$v.country.minLength && submitStatus === 'ERROR'"
             class="error"
-            style="color: red;"
           >Country Name must have at least {{$v.country.$params.minLength.min}} letters.</div>
           <div
             class="success-message"
@@ -41,7 +40,7 @@
             class="success-message"
             v-if="submitStatus === 'DELETED' "
           >Country Deleted successfully</div>
-          <div class="error" v-if="submitStatus === 'UPDATION ERROR'">This Name Already exists</div>
+          <div class="error" v-if="submitStatus === 'UPDATION ERROR'">Invalid Country Name</div>
         </md-field>
         <md-card-actions v-if="showActionButtons">
           <md-button @click="updateCountry" type="submit" class="md-primary">Update</md-button>
@@ -74,6 +73,7 @@ export default {
       countryId: undefined,
       submitStatus: "",
       loader: false,
+      errMsg: ''
     };
   },
   async created() {
@@ -81,19 +81,13 @@ export default {
   },
   methods: {
     filterCountry() {
-      console.log(this.search);
       if (this.search.length > 1) {
         GlobalService.searchCountry(this.search).then((res) => {
           this.getAllCountries = res;
-          console.log("resresres1111:", res);
         });
       } else {
         this.fetchAllCountries();
       }
-      // this.$search(this.search, this.getAllCountries, "").then((results) => {
-      //   console.log("results: ", results);
-      //   this.search = results;
-      // });
     },
     fetchAllCountries() {
       this.loader = true;
@@ -115,10 +109,9 @@ export default {
           this.fetchAllCountries();
           this.country = "";
         })
-        .catch((e) => {
+        .catch(() => {
           this.loader = false;
           this.submitStatus = "ERROR";
-          console.log(e);
         });
     },
     onNewCountry() {
