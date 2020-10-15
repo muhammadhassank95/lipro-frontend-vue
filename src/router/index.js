@@ -19,7 +19,7 @@ const routes = [
     component: User,
   },
   {
-    path: '/add-country',
+    path: '/countries',
     name: 'Countries',
     component: Country,
   },

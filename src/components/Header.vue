@@ -78,7 +78,7 @@ export default {
           break;
         case "countries":
           this.headerTitle = "Countries";
-          router.push("/add-country");
+          router.push("/countries");
           break;
         case "consultantPlan":
           this.headerTitle = "Consultant Plan";
