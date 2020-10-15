@@ -173,9 +173,9 @@
             <div>
               <p class="error" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
             </div>
-            <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated sucessfully</div>
-            <div class="success-message" v-if="submitStatus === 'ADDED'">User Added sucessfully</div>
-            <div class="success-message" v-if="submitStatus === 'DELETED' ">User Deleted sucessfully</div>
+            <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated successfully</div>
+            <div class="success-message" v-if="submitStatus === 'ADDED'">User Added successfully</div>
+            <div class="success-message" v-if="submitStatus === 'DELETED' ">User Deleted successfully</div>
             <div class="error" v-if="submitStatus === 'UPDATION ERROR'">This Name Already exists</div>
             <md-card-actions v-if="showActionButtons">
               <md-button @click="updateUser" type="submit" class="md-primary">Update</md-button>

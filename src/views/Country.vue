@@ -26,21 +26,21 @@
           <div
             class="error"
             v-if="!$v.country.required && submitStatus === 'ERROR'"
-          >Last Name is required</div>
+          >Country Name is required</div>
           <div
             v-if="!$v.country.minLength && submitStatus === 'ERROR'"
             class="error"
             style="color: red;"
-          >Last Name must have at least {{$v.country.$params.minLength.min}} letters.</div>
+          >Country Name must have at least {{$v.country.$params.minLength.min}} letters.</div>
           <div
             class="success-message"
             v-if="submitStatus === 'UPDATED' "
-          >Country Updated sucessfully</div>
+          >Country Updated successfully</div>
           <div class="success-message" v-if="submitStatus === 'ADDED' ">Country Added successfully</div>
           <div
             class="success-message"
             v-if="submitStatus === 'DELETED' "
-          >Country Deleted sucessfully</div>
+          >Country Deleted successfully</div>
           <div class="error" v-if="submitStatus === 'UPDATION ERROR'">This Name Already exists</div>
         </md-field>
         <md-card-actions v-if="showActionButtons">
