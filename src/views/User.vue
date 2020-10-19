@@ -223,10 +223,10 @@
 <script>
 import UserService from "../services/user-service";
 import GlobalService from "../services/global-service";
-import moment from "moment";
-import AccessRights from '../components/AccessRights'
-import Costs from '../components/Costs'
+import AccessRights from '../components/AccessRights';
+import Costs from '../components/Costs';
 
+import moment from "moment";
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
 
 export default {
