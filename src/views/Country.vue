@@ -13,7 +13,7 @@
         />
         <a href="javascript:void(0)" @click="onNewCountry">New Country</a>
         <hr />
-        <ul class="list-group">
+        <ul class="list-group overflow-auto">
           <li v-for="c in getAllCountries" :key="c._id" @click="onCountryFilled(c)">
             <a class="list-group-item">{{c.country}}</a>
           </li>

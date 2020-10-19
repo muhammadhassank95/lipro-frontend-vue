@@ -1,4 +1,5 @@
 <template>
+
   <div class="container-fluid">
     <div class="md-layout md-gutter mt-4">
       <div
@@ -20,6 +21,22 @@
         class="md-layout-item md-medium-size-70 md-small-size-50 md-xsmall-size-100"
       >
         <div class="card p-4 mb-3">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="home-tab" data-toggle="tab" href="/countries" role="tab" aria-controls="home" aria-selected="true">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="profile-tab" data-toggle="tab" href="/countries" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">1</div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">2</div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">3</div>
+          </div>
           <div class="d-flex align-items-center">
             <label class="mr-3 mb-0">User</label>
             <input
@@ -170,20 +187,22 @@
                 v-if="!$v.confirm_password.sameAsPassword"
               >Passwords must be identical.</div>
             </md-field>
-            <div>
-              <p class="error-form" v-if="submitStatus === 'ERROR'">Please fill the form correctly.</p>
+            <div class="set w-100">
+              <div>
+                <div v-if="submitStatus === 'ERROR'">Please fill the form correctly.</div>
+                <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated successfully.</div>
+                <div class="success-message" v-if="submitStatus === 'ADDED'">User Added successfully.</div>
+                <div class="success-message" v-if="submitStatus === 'DELETED' ">User Deleted successfully.</div>
+                <div class="error" v-if="submitStatus === 'UPDATION ERROR'">This Name Already exists.</div>
+              </div>
+              <md-card-actions v-if="showActionButtons">
+                <md-button @click="updateUser" type="submit" class="md-primary">Update</md-button>
+                <md-button @click="deleteUser" type="submit" class="md-primary">Delete</md-button>
+              </md-card-actions>
+              <md-card-actions v-else>
+                <md-button type="submit" class="md-primary">Create user</md-button>
+              </md-card-actions>
             </div>
-            <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated successfully</div>
-            <div class="success-message" v-if="submitStatus === 'ADDED'">User Added successfully</div>
-            <div class="success-message" v-if="submitStatus === 'DELETED' ">User Deleted successfully</div>
-            <div class="error" v-if="submitStatus === 'UPDATION ERROR'">This Name Already exists</div>
-            <md-card-actions v-if="showActionButtons">
-              <md-button @click="updateUser" type="submit" class="md-primary">Update</md-button>
-              <md-button @click="deleteUser" type="submit" class="md-primary">Delete</md-button>
-            </md-card-actions>
-            <md-card-actions v-else>
-              <md-button type="submit" class="md-primary">Create user</md-button>
-            </md-card-actions>
           </form>
         </div>
       </div>
@@ -307,7 +326,8 @@ export default {
           this.loader = false;
           this.fetchAllUsers();
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e)
           this.loader = false;
           this.submitStatus = "ERROR";
         });
@@ -339,6 +359,7 @@ export default {
           this.loader = false;
           this.submitStatus = "UPDATED";
           this.fetchAllUsers();
+          this.onNewUser();
         })
         .catch(() => {
           this.loader = false;
@@ -388,4 +409,5 @@ export default {
     },
   },
 };
+
 </script>

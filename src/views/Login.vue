@@ -16,7 +16,6 @@
           <div
             v-if="!$v.loginname.minLength && submitStatus === 'ERROR'"
             class="error"
-            style="color: red;"
           >Login Name must have at least {{$v.loginname.$params.minLength.min}} letters.</div>
         </md-field>
 
@@ -30,7 +29,6 @@
           <div
             v-if="!$v.password.minLength && submitStatus === 'ERROR'"
             class="error"
-            style="color: red;"
           >Password must have at least {{$v.password.$params.minLength.min}} letters.</div>
         </md-field>
       </div>
@@ -69,11 +67,11 @@ export default {
       UserService.login(this.loginname, this.password)
         .then((res) => {
           this.loader = false;
-          router.push(`/consultant_plan`);
-          router.go();
           localStorage.setItem("userToken", res.token);
           localStorage.setItem("userName", res.user.firstname);
           localStorage.setItem("headerTitlePassed", "Consultant Plan");
+          router.push(`/consultant_plan`);
+          router.go();
         })
         .catch((e) => {
           this.loader = false;

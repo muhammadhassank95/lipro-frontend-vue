@@ -64,25 +64,28 @@ export default {
   }),
   methods: {
     signout() {
+      router.push("/");
+      router.go();
+      this.isHeader = '';
+      this.headerUserName = '';
+      this.headerTitle = '';
       localStorage.removeItem("userToken");
       localStorage.removeItem("userName");
       localStorage.removeItem("headerTitlePassed");
-      router.push("/");
-      router.go();
     },
     onHeaderItemPressed(item) {
       switch (item) {
         case "user":
-          this.headerTitle = "Users";
           router.push("/users");
+          this.headerTitle = "Users";
           break;
         case "countries":
-          this.headerTitle = "Countries";
           router.push("/countries");
+          this.headerTitle = "Countries";
           break;
         case "consultantPlan":
-          this.headerTitle = "Consultant Plan";
           router.push("/consultant_plan");
+          this.headerTitle = "Consultant Plan";
           break;
       }
     },
