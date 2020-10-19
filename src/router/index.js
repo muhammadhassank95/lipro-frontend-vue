@@ -17,16 +17,6 @@ function guardMyroute(to, from, next) {
     }
 }
 
-// function guardMyLoginroute(to, from, next) {
-//     if (!(localStorage.getItem('userToken') && localStorage.getItem('userName'))) {
-//         next({
-//             name: "Login"
-//         });
-//     } else {
-//         next();
-//     }
-// }
-
 const routes = [{
         path: '/',
         name: 'Login',
