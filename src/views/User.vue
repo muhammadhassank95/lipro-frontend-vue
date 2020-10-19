@@ -23,190 +23,195 @@
         <div class="card p-4 mb-3">
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" id="home-tab" data-toggle="tab" href="/countries" role="tab" aria-controls="home" aria-selected="true">Home</a>
+              <a class="nav-link" :class="{'active': isUserActive}" id="home-tab" data-toggle="tab" href="javascript:void(0)" @click="onUserTabClicked()" role="tab" aria-controls="home" aria-selected="true">Users</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="profile-tab" data-toggle="tab" href="/countries" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+              <a class="nav-link" :class="{'active': isAccessRight}" id="profile-tab" data-toggle="tab" href="javascript:void(0)" @click="onAccessRightsTabClicked()" role="tab" aria-controls="profile" aria-selected="false">Access Rights</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+              <a class="nav-link" :class="{'active': isCost}" id="contact-tab" data-toggle="tab" href="javascript:void(0)" @click="onCostTabClicked()" role="tab" aria-controls="contact" aria-selected="false">Costs</a>
             </li>
           </ul>
-          <!-- <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">1</div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">2</div>
-            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">3</div>
-          </div> -->
-          <div class="d-flex align-items-center">
-            <label class="mr-3 mb-0">User</label>
-            <input
-              type="text"
-              class="form-control w-50"
-              placeholder="Username"
-              aria-label="Username"
-              aria-describedby="basic-addon1"
-              disabled
-              :value="firstname + ' ' + lastname"
-            />
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade " :class="{ 'show active': isUserActive }" id="home" role="tabpanel" aria-labelledby="home-tab">
+              <div class="d-flex align-items-center">
+                <label class="mr-3 mb-0">User</label>
+                <input
+                  type="text"
+                  class="form-control w-50"
+                  placeholder="Username"
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                  disabled
+                  :value="firstname + ' ' + lastname"
+                />
+              </div>
+              <form class="md-layout" @submit.prevent="signup">
+                <md-field>
+                  <label>Last Name</label>
+                  <md-input v-model="lastname"></md-input>
+                  <div
+                    class="error"
+                    v-if="!$v.lastname.required && submitStatus === 'ERROR'"
+                  >Last Name is required</div>
+                  <div
+                    v-if="!$v.lastname.minLength"
+                    class="error"
+                    style="color: red;"
+                  >Last Name must have at least {{$v.lastname.$params.minLength.min}} letters.</div>
+                </md-field>
+                <md-field>
+                  <label>First Name</label>
+                  <md-input v-model="firstname"></md-input>
+                  <div
+                    class="error"
+                    v-if="!$v.firstname.required && submitStatus === 'ERROR'"
+                  >First Name is required</div>
+                  <div
+                    v-if="!$v.firstname.minLength"
+                    class="error"
+                    style="color: red;"
+                  >First Name must have at least {{$v.firstname.$params.minLength.min}} letters.</div>
+                </md-field>
+                <md-field>
+                  <label for="salutation">Salutation</label>
+                  <md-select v-model="salutation" name="salutation" id="salutation">
+                    <md-option :value="1">MR</md-option>
+                    <md-option :value="2">Mrs</md-option>
+                  </md-select>
+                </md-field>
+                <md-field>
+                  <label>Title</label>
+                  <md-input v-model="title"></md-input>
+                </md-field>
+                <div class="my-2 w-100">
+                  <label for="active_checkbox" class="d-flex align-items-center">
+                    <input class="mr-2" id="active_checkbox" type="checkbox" checked v-model="active" /> Active
+                  </label>
+                </div>
+                <div class="row md-layout md-gutter">
+                  <div class="col-md-12">
+                    <label>Start Date</label>
+                  </div>
+                  <div class="col-md-12">
+                    <md-datepicker v-model="startdate" />
+                  </div>
+                  <div class="col-md-12">
+                    <label>End Date</label>
+                  </div>
+                  <div class="col-md-12">
+                    <md-datepicker v-model="enddate" />
+                  </div>
+                </div>
+                <md-field>
+                  <label>Abbreviation</label>
+                  <md-input v-model="loginname"></md-input>
+                  <div
+                    class="error"
+                    v-if="!$v.loginname.required && submitStatus === 'ERROR'"
+                  >Abbreviation is required</div>
+                  <div
+                    v-if="!$v.loginname.minLength && submitStatus === 'ERROR'"
+                    class="error"
+                    style="color: red;"
+                  >First Name must have at least {{$v.loginname.$params.minLength.min}} letters.</div>
+                </md-field>
+                <md-field>
+                  <label>Country</label>
+                  <md-select v-model="countryId" name="countries" id="countries">
+                    <md-option v-for="c in countries" :key="c._id" :value="c._id">{{c.country}}</md-option>
+                  </md-select>
+                </md-field>
+                <md-field>
+                  <label>Category</label>
+                  <md-select v-model="categoryId" name="category" id="category">
+                    <md-option value="5f68c0fd7067ce9213ff1e7f">PM</md-option>
+                    <md-option value="5f68c0fd7067ce9213ff1e7f">BD</md-option>
+                  </md-select>
+                  <div
+                    class="error"
+                    v-if="!$v.categoryId.required && submitStatus === 'ERROR'"
+                  >User Category is required.</div>
+                </md-field>
+                <md-field>
+                  <label>Function</label>
+                  <md-select
+                    v-model="consultant_function_id"
+                    name="consultant_function_id"
+                    id="consultant_function_id"
+                  >
+                    <md-option value="5f68c0fd7067ce9213ff1e7f">PM</md-option>
+                    <md-option value="2">BD</md-option>
+                    <md-option value="3">Partner</md-option>
+                    <md-option value="5f68c0fd7067ce9213ff1e7f">Student</md-option>
+                    <md-option value="5f68c0fd7067ce9213ff1e7f">Personal</md-option>
+                  </md-select>
+                </md-field>
+                <md-field>
+                  <label>Street</label>
+                  <md-input v-model="street"></md-input>
+                </md-field>
+                <md-field>
+                  <label>PostCode/Town</label>
+                  <md-input v-model="zipCode"></md-input>
+                </md-field>
+                <md-field>
+                  <label>City</label>
+                  <md-input v-model="city"></md-input>
+                </md-field>
+                <md-field>
+                  <label>Email</label>
+                  <md-input v-model="email"></md-input>
+                  <div
+                    class="error"
+                    v-if="!$v.email.required && submitStatus === 'ERROR'"
+                  >Email is required.</div>
+                </md-field>
+                <md-field>
+                  <label>Password</label>
+                  <md-input type="password" v-model="password"></md-input>
+                  <div
+                    class="error"
+                    v-if="!$v.password.required && submitStatus === 'ERROR'"
+                  >Password is required.</div>
+                  <div
+                    class="error"
+                    v-if="!$v.password.minLength && submitStatus === 'ERROR'"
+                  >Password must have at least {{ $v.password.$params.minLength.min }} letters.</div>
+                </md-field>
+                <md-field>
+                  <label>Confirm Password</label>
+                  <md-input type="password" v-model="confirm_password"></md-input>
+                  <div
+                    class="error"
+                    v-if="!$v.confirm_password.sameAsPassword"
+                  >Passwords must be identical.</div>
+                </md-field>
+                <div class="set w-100">
+                  <div>
+                    <div v-if="submitStatus === 'ERROR'">Please fill the form correctly.</div>
+                    <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated successfully.</div>
+                    <div class="success-message" v-if="submitStatus === 'ADDED'">User Added successfully.</div>
+                    <div class="success-message" v-if="submitStatus === 'DELETED' ">User Deleted successfully.</div>
+                    <div class="error" v-if="submitStatus === 'UPDATION ERROR'">This Name Already exists.</div>
+                  </div>
+                  <md-card-actions v-if="showActionButtons">
+                    <md-button @click="updateUser" type="submit" class="md-primary">Update</md-button>
+                    <md-button @click="deleteUser" type="submit" class="md-primary">Delete</md-button>
+                  </md-card-actions>
+                  <md-card-actions v-else>
+                    <md-button type="submit" class="md-primary">Create user</md-button>
+                  </md-card-actions>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane fade" :class="{'show active': isAccessRight}"  id="profile" role="tabpanel" aria-labelledby="profile-tab">
+              <AccessRights/>
+            </div>
+            <div class="tab-pane fade" :class="{'show active': isCost}"  id="contact" role="tabpanel" aria-labelledby="contact-tab">
+              <Costs />
+            </div>
           </div>
-          <form class="md-layout" @submit.prevent="signup">
-            <md-field>
-              <label>Last Name</label>
-              <md-input v-model="lastname"></md-input>
-              <div
-                class="error"
-                v-if="!$v.lastname.required && submitStatus === 'ERROR'"
-              >Last Name is required</div>
-              <div
-                v-if="!$v.lastname.minLength"
-                class="error"
-                style="color: red;"
-              >Last Name must have at least {{$v.lastname.$params.minLength.min}} letters.</div>
-            </md-field>
-            <md-field>
-              <label>First Name</label>
-              <md-input v-model="firstname"></md-input>
-              <div
-                class="error"
-                v-if="!$v.firstname.required && submitStatus === 'ERROR'"
-              >First Name is required</div>
-              <div
-                v-if="!$v.firstname.minLength"
-                class="error"
-                style="color: red;"
-              >First Name must have at least {{$v.firstname.$params.minLength.min}} letters.</div>
-            </md-field>
-            <md-field>
-              <label for="salutation">Salutation</label>
-              <md-select v-model="salutation" name="salutation" id="salutation">
-                <md-option :value="1">MR</md-option>
-                <md-option :value="2">Mrs</md-option>
-              </md-select>
-            </md-field>
-            <md-field>
-              <label>Title</label>
-              <md-input v-model="title"></md-input>
-            </md-field>
-            <div class="my-2 w-100">
-              <label for="active_checkbox" class="d-flex align-items-center">
-                <input class="mr-2" id="active_checkbox" type="checkbox" checked v-model="active" /> Active
-              </label>
-            </div>
-            <div class="row md-layout md-gutter">
-              <div class="col-md-12">
-                <label>Start Date</label>
-              </div>
-              <div class="col-md-12">
-                <md-datepicker v-model="startdate" />
-              </div>
-              <div class="col-md-12">
-                <label>End Date</label>
-              </div>
-              <div class="col-md-12">
-                <md-datepicker v-model="enddate" />
-              </div>
-            </div>
-            <md-field>
-              <label>Abbreviation</label>
-              <md-input v-model="loginname"></md-input>
-              <div
-                class="error"
-                v-if="!$v.loginname.required && submitStatus === 'ERROR'"
-              >Abbreviation is required</div>
-              <div
-                v-if="!$v.loginname.minLength && submitStatus === 'ERROR'"
-                class="error"
-                style="color: red;"
-              >First Name must have at least {{$v.loginname.$params.minLength.min}} letters.</div>
-            </md-field>
-            <md-field>
-              <label>Country</label>
-              <md-select v-model="countryId" name="countries" id="countries">
-                <md-option v-for="c in countries" :key="c._id" :value="c._id">{{c.country}}</md-option>
-              </md-select>
-            </md-field>
-            <md-field>
-              <label>Category</label>
-              <md-select v-model="categoryId" name="category" id="category">
-                <md-option value="5f68c0fd7067ce9213ff1e7f">PM</md-option>
-                <md-option value="5f68c0fd7067ce9213ff1e7f">BD</md-option>
-              </md-select>
-              <div
-                class="error"
-                v-if="!$v.categoryId.required && submitStatus === 'ERROR'"
-              >User Category is required.</div>
-            </md-field>
-            <md-field>
-              <label>Function</label>
-              <md-select
-                v-model="consultant_function_id"
-                name="consultant_function_id"
-                id="consultant_function_id"
-              >
-                <md-option value="5f68c0fd7067ce9213ff1e7f">PM</md-option>
-                <md-option value="2">BD</md-option>
-                <md-option value="3">Partner</md-option>
-                <md-option value="5f68c0fd7067ce9213ff1e7f">Student</md-option>
-                <md-option value="5f68c0fd7067ce9213ff1e7f">Personal</md-option>
-              </md-select>
-            </md-field>
-            <md-field>
-              <label>Street</label>
-              <md-input v-model="street"></md-input>
-            </md-field>
-            <md-field>
-              <label>PostCode/Town</label>
-              <md-input v-model="zipCode"></md-input>
-            </md-field>
-            <md-field>
-              <label>City</label>
-              <md-input v-model="city"></md-input>
-            </md-field>
-            <md-field>
-              <label>Email</label>
-              <md-input v-model="email"></md-input>
-              <div
-                class="error"
-                v-if="!$v.email.required && submitStatus === 'ERROR'"
-              >Email is required.</div>
-            </md-field>
-            <md-field>
-              <label>Password</label>
-              <md-input type="password" v-model="password"></md-input>
-              <div
-                class="error"
-                v-if="!$v.password.required && submitStatus === 'ERROR'"
-              >Password is required.</div>
-              <div
-                class="error"
-                v-if="!$v.password.minLength && submitStatus === 'ERROR'"
-              >Password must have at least {{ $v.password.$params.minLength.min }} letters.</div>
-            </md-field>
-            <md-field>
-              <label>Confirm Password</label>
-              <md-input type="password" v-model="confirm_password"></md-input>
-              <div
-                class="error"
-                v-if="!$v.confirm_password.sameAsPassword"
-              >Passwords must be identical.</div>
-            </md-field>
-            <div class="set w-100">
-              <div>
-                <div v-if="submitStatus === 'ERROR'">Please fill the form correctly.</div>
-                <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated successfully.</div>
-                <div class="success-message" v-if="submitStatus === 'ADDED'">User Added successfully.</div>
-                <div class="success-message" v-if="submitStatus === 'DELETED' ">User Deleted successfully.</div>
-                <div class="error" v-if="submitStatus === 'UPDATION ERROR'">This Name Already exists.</div>
-              </div>
-              <md-card-actions v-if="showActionButtons">
-                <md-button @click="updateUser" type="submit" class="md-primary">Update</md-button>
-                <md-button @click="deleteUser" type="submit" class="md-primary">Delete</md-button>
-              </md-card-actions>
-              <md-card-actions v-else>
-                <md-button type="submit" class="md-primary">Create user</md-button>
-              </md-card-actions>
-            </div>
-          </form>
         </div>
       </div>
       <div v-if="loader === true" class="loader">
@@ -219,12 +224,17 @@
 import UserService from "../services/user-service";
 import GlobalService from "../services/global-service";
 import moment from "moment";
+import AccessRights from '../components/AccessRights'
+import Costs from '../components/Costs'
 
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
 
 export default {
   name: "User",
-  components: {},
+  components: {
+    AccessRights,
+    Costs
+  },
   data() {
     return {
       lastname: "",
@@ -250,6 +260,9 @@ export default {
       loader: false,
       showActionButtons: false,
       userId: undefined,
+      isUserActive: true,
+      isAccessRight: false,
+      isCost: false
     };
   },
   async mounted() {
@@ -261,6 +274,22 @@ export default {
       this.loader = true;
       this.getAllUsers = await UserService.getUsers();
       this.loader = false;
+    },
+    onUserTabClicked() {
+      this.isUserActive = true;
+      this.isAccessRight = false;
+      this.isCost = false;
+    },
+    onAccessRightsTabClicked() {
+      console.log('called')
+       this.isUserActive = false;
+       this.isAccessRight = true;
+       this.isCost = false;
+    },
+    onCostTabClicked() {
+      this.isUserActive = false;
+      this.isAccessRight = false;
+      this.isCost = true;
     },
     onNewUser() {
       this.showActionButtons = false;
