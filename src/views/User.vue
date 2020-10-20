@@ -2,14 +2,11 @@
 
   <div class="container-fluid">
     <div class="md-layout md-gutter mt-4">
-      <div
-        v-if="loader === false"
-        class="md-layout-item md-medium-size-30 md-small-size-50 md-xsmall-size-100"
-      >
+      <div v-if="loader === false" class="md-layout-item md-medium-size-30 md-small-size-50 md-xsmall-size-100">
         <div class="card p-4 mb-3">
           <a href="javascript:void(0)" @click="onNewUser">New User</a>
           <hr />
-          <ul class="list-group">
+          <ul>
             <li v-for="users in getAllUsers" :key="users._id" @click="onUserFilled(users)">
               <a class="list-group-item">{{users.loginname}}</a>
             </li>
@@ -164,7 +161,7 @@
                   <md-input v-model="email"></md-input>
                   <div
                     class="error"
-                    v-if="!$v.email.required && submitStatus === 'ERROR'"
+                    v-if="!$v.email.required || submitStatus === 'ERROR'"
                   >Email is required.</div>
                 </md-field>
                 <md-field>
@@ -193,7 +190,7 @@
                     <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated successfully.</div>
                     <div class="success-message" v-if="submitStatus === 'ADDED'">User Added successfully.</div>
                     <div class="success-message" v-if="submitStatus === 'DELETED' ">User Deleted successfully.</div>
-                    <div class="error" v-if="submitStatus === 'UPDATION ERROR'">This Name Already exists.</div>
+                    <div class="error" v-if="submitStatus === 'UPDATION ERROR'">{{updationErr}}</div>
                   </div>
                   <md-card-actions v-if="showActionButtons">
                     <md-button @click="updateUser" type="submit" class="md-primary">Update</md-button>
@@ -263,7 +260,8 @@ export default {
       isUserActive: true,
       isAccessRight: false,
       isCost: false,
-      isUpdateClick: false
+      isUpdateClick: false,
+      updationErr: ''
     };
   },
   async mounted() {
@@ -387,8 +385,7 @@ export default {
         this.street,
         this.zipCode,
         this.city,
-        this.password,
-        this.confirm_password
+        this.password
       )
         .then(() => {
           this.loader = false;
@@ -397,9 +394,11 @@ export default {
           this.fetchAllUsers();
           this.onNewUser();
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e)
           this.loader = false;
           this.submitStatus = "UPDATION ERROR";
+          this.updationErr = e.body.message;
         });
     },
     deleteUser() {
