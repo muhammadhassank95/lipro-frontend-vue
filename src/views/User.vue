@@ -26,13 +26,13 @@
               <a class="nav-link" :class="{'active': isUserActive}" id="home-tab" data-toggle="tab" href="javascript:void(0)" @click="onUserTabClicked()" role="tab" aria-controls="home" aria-selected="true">Users</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" :class="{'active': isAccessRight}" id="profile-tab" data-toggle="tab" href="javascript:void(0)" @click="onAccessRightsTabClicked()" role="tab" aria-controls="profile" aria-selected="false">Access Rights</a>
+              <a class="nav-link" :class="{'active': isAccessRight, 'disabled': !isUpdateClick}" id="profile-tab" data-toggle="tab" href="javascript:void(0)" @click="onAccessRightsTabClicked()" role="tab" aria-controls="profile" aria-selected="false">Access Rights</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" :class="{'active': isCost}" id="contact-tab" data-toggle="tab" href="javascript:void(0)" @click="onCostTabClicked()" role="tab" aria-controls="contact" aria-selected="false">Costs</a>
+              <a class="nav-link" :class="{'active': isCost, 'disabled': !isUpdateClick}" id="contact-tab" data-toggle="tab" href="javascript:void(0)" @click="onCostTabClicked()" role="tab" aria-controls="contact" aria-selected="false">Costs</a>
             </li>
           </ul>
-          <div class="tab-content" id="myTabContent">
+          <div style="margin-top:10px" class="tab-content" id="myTabContent">
             <div class="tab-pane fade " :class="{ 'show active': isUserActive }" id="home" role="tabpanel" aria-labelledby="home-tab">
               <div class="d-flex align-items-center">
                 <label class="mr-3 mb-0">User</label>
@@ -46,7 +46,7 @@
                   :value="firstname + ' ' + lastname"
                 />
               </div>
-              <form class="md-layout" @submit.prevent="signup">
+              <form class="md-layout">
                 <md-field>
                   <label>Last Name</label>
                   <md-input v-model="lastname"></md-input>
@@ -200,7 +200,7 @@
                     <md-button @click="deleteUser" type="submit" class="md-primary">Delete</md-button>
                   </md-card-actions>
                   <md-card-actions v-else>
-                    <md-button type="submit" class="md-primary">Create user</md-button>
+                    <md-button @click="signup" type="submit" class="md-primary">Create user</md-button>
                   </md-card-actions>
                 </div>
               </form>
@@ -223,8 +223,8 @@
 <script>
 import UserService from "../services/user-service";
 import GlobalService from "../services/global-service";
-import AccessRights from '../components/AccessRights';
-import Costs from '../components/Costs';
+import AccessRights from '../views/AccessRights';
+import Costs from '../views/Costs';
 
 import moment from "moment";
 import { required, sameAs, minLength } from "vuelidate/lib/validators";
@@ -262,7 +262,8 @@ export default {
       userId: undefined,
       isUserActive: true,
       isAccessRight: false,
-      isCost: false
+      isCost: false,
+      isUpdateClick: false
     };
   },
   async mounted() {
@@ -281,7 +282,6 @@ export default {
       this.isCost = false;
     },
     onAccessRightsTabClicked() {
-      console.log('called')
        this.isUserActive = false;
        this.isAccessRight = true;
        this.isCost = false;
@@ -292,6 +292,7 @@ export default {
       this.isCost = true;
     },
     onNewUser() {
+      this.isUpdateClick = false;
       this.showActionButtons = false;
       this.email = undefined;
       this.firstname = "";
@@ -312,6 +313,7 @@ export default {
       this.confirm_password = undefined;
     },
     onUserFilled(user) {
+      this.isUpdateClick = true;
       this.userId = user._id;
       this.showActionButtons = true;
       this.email = user.mail;
@@ -335,7 +337,7 @@ export default {
     signup() {
       this.$v.$touch();
       this.loader = true;
-      UserService.signup(
+      UserService.signupUserApi(
         this.email,
         this.firstname,
         this.lastname,
@@ -355,6 +357,7 @@ export default {
         this.confirm_password
       )
         .then(() => {
+          this.isUpdateClick = true;
           this.loader = false;
           this.fetchAllUsers();
         })
@@ -389,6 +392,7 @@ export default {
       )
         .then(() => {
           this.loader = false;
+          this.isUpdateClick = true;
           this.submitStatus = "UPDATED";
           this.fetchAllUsers();
           this.onNewUser();
@@ -406,7 +410,6 @@ export default {
           this.submitStatus = "DELETED";
           this.fetchAllUsers();
           this.onNewUser();
-          // this.user = "";
         })
         .catch(() => {
           this.loader = false;
