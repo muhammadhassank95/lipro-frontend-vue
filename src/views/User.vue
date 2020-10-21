@@ -184,23 +184,23 @@
                     v-if="!$v.confirm_password.sameAsPassword"
                   >Passwords must be identical.</div>
                 </md-field>
-                <div class="set w-100">
-                  <div>
-                    <div v-if="submitStatus === 'ERROR'">Please fill the form correctly.</div>
-                    <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated successfully.</div>
-                    <div class="success-message" v-if="submitStatus === 'ADDED'">User Added successfully.</div>
-                    <div class="success-message" v-if="submitStatus === 'DELETED' ">User Deleted successfully.</div>
-                    <div class="error" v-if="submitStatus === 'UPDATION ERROR'">{{updationErr}}</div>
-                  </div>
-                  <md-card-actions v-if="showActionButtons">
-                    <md-button @click="updateUser" type="submit" class="md-primary">Update</md-button>
-                    <md-button @click="deleteUser" type="submit" class="md-primary">Delete</md-button>
-                  </md-card-actions>
-                  <md-card-actions v-else>
-                    <md-button @click="signup" type="submit" class="md-primary">Create user</md-button>
-                  </md-card-actions>
-                </div>
               </form>
+              <div class="set w-100">
+                <div>
+                  <div v-if="submitStatus === 'ERROR'">Please fill the form correctly.</div>
+                  <div class="success-message" v-if="submitStatus === 'UPDATED'">User Updated successfully.</div>
+                  <div class="success-message" v-if="submitStatus === 'ADDED'">User Added successfully.</div>
+                  <div class="success-message" v-if="submitStatus === 'DELETED' ">User Deleted successfully.</div>
+                  <div class="error" v-if="submitStatus === 'UPDATION ERROR'">{{updationErr}}</div>
+                </div>
+                <md-card-actions v-if="showActionButtons">
+                  <md-button @click="updateUser" type="submit" class="md-primary">Update</md-button>
+                  <md-button @click="deleteUser" type="submit" class="md-primary">Delete</md-button>
+                </md-card-actions>
+                <md-card-actions v-else>
+                  <md-button @click="signup" type="submit" class="md-primary">Create user</md-button>
+                </md-card-actions>
+              </div>
             </div>
             <div class="tab-pane fade" :class="{'show active': isAccessRight}"  id="profile" role="tabpanel" aria-labelledby="profile-tab">
               <AccessRights/>
@@ -291,6 +291,7 @@ export default {
     },
     onNewUser() {
       this.isUpdateClick = false;
+      this.onUserTabClicked();
       this.showActionButtons = false;
       this.email = undefined;
       this.firstname = "";

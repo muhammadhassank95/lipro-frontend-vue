@@ -78,13 +78,16 @@ export default {
         case "user":
           router.push("/users");
           this.headerTitle = "Users";
+          localStorage.setItem("headerTitlePassed", "User");
           break;
         case "countries":
           router.push("/countries");
+          localStorage.setItem("headerTitlePassed", "Country");
           this.headerTitle = "Countries";
           break;
         case "consultantPlan":
           router.push("/consultant_plan");
+          localStorage.setItem("headerTitlePassed", "Consultant Plan");
           this.headerTitle = "Consultant Plan";
           break;
       }
