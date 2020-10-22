@@ -82,7 +82,7 @@ export default {
   methods: {
     filterCountry() {
       if (this.search.length > 1) {
-        GlobalService.searchCountry(this.search).then((res) => {
+        GlobalService.search('country', this.search).then((res) => {
           this.getAllCountries = res;
         });
       } else {
@@ -91,7 +91,7 @@ export default {
     },
     fetchAllCountries() {
       this.loader = true;
-      GlobalService.getCountries()
+      GlobalService.get('country')
         .then((res) => {
           this.loader = false;
           this.getAllCountries = res;
@@ -102,7 +102,7 @@ export default {
     },
     addNewCountry() {
       this.loader = true;
-      GlobalService.createCountry(this.country)
+      GlobalService.add('country', this.country)
         .then(() => {
           this.loader = false;
           this.submitStatus = "ADDED";
@@ -127,7 +127,7 @@ export default {
     },
     updateCountry() {
       this.loader = true;
-      GlobalService.updateCountry(this.countryId, this.country)
+      GlobalService.update('country', this.countryId, this.country)
         .then(() => {
           this.loader = false;
           this.submitStatus = "UPDATED";
@@ -140,7 +140,7 @@ export default {
     },
     deleteCountry() {
       this.loader = true;
-      GlobalService.deleteCountry(this.countryId)
+      GlobalService.delete('country', this.countryId)
         .then(() => {
           this.showActionButtons = false;
           this.loader = false;

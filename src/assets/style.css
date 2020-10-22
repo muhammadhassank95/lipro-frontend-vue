@@ -27,9 +27,28 @@ a {
     justify-content: space-between;
 }
 
+.error-pages {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 550px;
+}
+
+.error-pages h3 {
+    color: #214764;
+}
+
 .error-form {
     text-align: center;
     color: red;
+    font-size: 12px;
+}
+
+.success-form {
+    text-align: center;
+    color: green;
+    font-size: 12px;
 }
 
 .error {

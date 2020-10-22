@@ -31,12 +31,12 @@
           </md-menu>
           <md-menu>
             <md-button md-menu-trigger>Administration</md-button>
-            <md-menu-content>
+            <md-menu-content style="min-height:400px">
               <md-menu-item @click="onHeaderItemPressed('user')">Users</md-menu-item>
               <md-menu-item @click="onHeaderItemPressed('countries')">Countries</md-menu-item>
               <md-menu-item>Constultant Functions</md-menu-item>
               <md-menu-item>Classifications</md-menu-item>
-              <md-menu-item>Branches</md-menu-item>
+              <md-menu-item @click="onHeaderItemPressed('branches')">Branches</md-menu-item>
               <md-menu-item>Themes</md-menu-item>
               <md-menu-item>Public Holidays</md-menu-item>
               <md-menu-item>System Settings</md-menu-item>
@@ -76,19 +76,24 @@ export default {
     onHeaderItemPressed(item) {
       switch (item) {
         case "user":
-          router.push("/users");
-          this.headerTitle = "Users";
           localStorage.setItem("headerTitlePassed", "User");
+          router.push("/users");
+          this.headerTitle = "User";
           break;
         case "countries":
-          router.push("/countries");
           localStorage.setItem("headerTitlePassed", "Country");
-          this.headerTitle = "Countries";
+          router.push("/countries");
+          this.headerTitle = "Country";
           break;
         case "consultantPlan":
-          router.push("/consultant_plan");
           localStorage.setItem("headerTitlePassed", "Consultant Plan");
+          router.push("/consultant_plan");
           this.headerTitle = "Consultant Plan";
+          break;
+        case "branches":
+          localStorage.setItem("headerTitlePassed", "Branch");
+          router.push("/branch");
+          this.headerTitle = "Branch";
           break;
       }
     },

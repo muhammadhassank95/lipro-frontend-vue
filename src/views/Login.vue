@@ -33,9 +33,22 @@
         </md-field>
       </div>
       <div v-if="submitStatus === 'ERROR'" class="error-form">{{ errorMessage }}</div>
+
+      <div v-if="sendEmail && submitStatus === 'EMAIL SENT'" class="success-form"> {{ emailSentText }} </div>
+      <div v-if="sendEmail && submitStatus === 'ERROR EMAIL SENT'" class="error-form"> {{ emailSentText }} </div>
+      
+      <md-dialog-prompt
+        :md-active.sync="toOpenModal"
+        v-model="sendEmail"
+        md-title="Enter your Email Id"
+        md-input-maxlength="50"
+        md-input-placeholder="Type your Email..."
+        @md-confirm="onConfirm"
+        md-confirm-text="Send"
+      />
       <div class="action-btn">
         <md-button @click="login" class="md-dense md-raised md-primary">Login</md-button>
-        <md-button class="md-dense md-raised md-primary">Forgot Password</md-button>
+        <md-button class="md-dense md-raised md-primary" @click="toOpenModal = true">Forgot Password</md-button>
       </div>
     </div>
     <div v-if="loader === true" class="loader">
@@ -59,9 +72,24 @@ export default {
       submitStatus: "",
       loader: false,
       errorMessage: undefined,
+      toOpenModal: false,
+      sendEmail: undefined,
+      emailSentText: undefined
     };
   },
   methods: {
+    onConfirm() {
+      UserService.forgotPasswordApi(this.sendEmail)
+        .then((res)=> {
+          this.emailSentText = res.message;
+          this.submitStatus = 'EMAIL SENT';
+        })
+        .catch((e) => {
+          console.log(e);
+          this.submitStatus = 'ERROR EMAIL SENT';
+          this.emailSentText = e.body.message;
+        });
+    },
     login() {
       this.loader = true;
       UserService.login(this.loginname, this.password)
@@ -82,6 +110,10 @@ export default {
   },
   validations: {
     loginname: {
+      required,
+      minLength: minLength(2),
+    },
+    sendEmail: {
       required,
       minLength: minLength(2),
     },

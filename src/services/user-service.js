@@ -105,7 +105,26 @@ const UserService = {
             "delete",
             `${baseUrl}/auth/delete-user/${userId}`
         );
-    }
+    },
+
+    forgotPasswordApi(userEmail) {
+        return doRequest(
+            "post",
+            `${baseUrl}/auth/forget-password`, {
+                mail: userEmail
+            }
+        )
+    },
+
+    resetPasswordApi(password, token) {
+        return doRequest(
+            "post",
+            `${baseUrl}/auth/reset-password`, {
+                password: password,
+                token: token
+            }
+        )
+    },
 };
 
 export default UserService;

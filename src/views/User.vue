@@ -1,5 +1,4 @@
 <template>
-
   <div class="container-fluid">
     <div class="md-layout md-gutter mt-4">
       <div v-if="loader === false" class="md-layout-item md-medium-size-30 md-small-size-50 md-xsmall-size-100">

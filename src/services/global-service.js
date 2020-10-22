@@ -2,48 +2,53 @@ import doRequest from "./index";
 import { baseUrl } from "../common/Constant";
 
 const GlobalService = {
-
-    //Countries
-    getCountries: () => {
+    get: (toAppend) => {
         return doRequest(
             "get",
-            `${baseUrl}/country`
+            `${baseUrl}/${toAppend}`
         );
     },
 
-    createCountry: (countryName) => {
+    add: (key, body) => {
+        let url = `${baseUrl}/${key}/add-new-${key}`
         return doRequest(
             "post",
-            `${baseUrl}/country/add-new-country`,
-            {
-                country: countryName,
+            url, {
+                [`${key}`]: body,
             }
         )
     },
 
-    updateCountry: (countryId, countryName) => {
+    update: (key, id, body) => {
         return doRequest(
             "put",
-            `${baseUrl}/country/update-country/${countryId}`,
-            {
-                country: countryName,
+            `${baseUrl}/${key}/update-${key}/${id}`, {
+                [`${key}`]: body,
             }
         );
     },
 
-    deleteCountry: (countryId) => {
+    delete: (key,countryId) => {
         return doRequest(
             "delete",
-            `${baseUrl}/country/delete-country/${countryId}`
+            `${baseUrl}/${key}/delete-${key}/${countryId}`
         );
     },
 
-    searchCountry: (query) => {
+    
+    search: (key, query) => {
         return doRequest(
             "get",
-            `${baseUrl}/country/search-country/${query}`
+            `${baseUrl}/${key}/search-${key}/${query}`
         );
     },
+
+    // searchCountry: (query) => {
+    //     return doRequest(
+    //         "get",
+    //         `${baseUrl}/country/search-country/${query}`
+    //     );
+    // },
 
 };
 
