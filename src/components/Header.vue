@@ -37,7 +37,7 @@
               <md-menu-item>Constultant Functions</md-menu-item>
               <md-menu-item>Classifications</md-menu-item>
               <md-menu-item @click="onHeaderItemPressed('branches')">Branches</md-menu-item>
-              <md-menu-item>Themes</md-menu-item>
+              <md-menu-item @click="onHeaderItemPressed('themes')">Themes</md-menu-item>
               <md-menu-item>Public Holidays</md-menu-item>
               <md-menu-item>System Settings</md-menu-item>
             </md-menu-content>
@@ -94,6 +94,11 @@ export default {
           localStorage.setItem("headerTitlePassed", "Branch");
           router.push("/branch");
           this.headerTitle = "Branch";
+          break;
+        case "themes":
+          localStorage.setItem("headerTitlePassed", "Theme");
+          router.push("/theme");
+          this.headerTitle = "Theme";
           break;
       }
     },

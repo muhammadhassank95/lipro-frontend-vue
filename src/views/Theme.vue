@@ -7,47 +7,47 @@
                     type="search"
                     placeholder="Search..."
                     class="form-control ds-input"
-                    @blur="filterBranch"
+                    @blur="filterTheme"
                     v-model="search"
                     style="position: relative; vertical-align: top; margin-top: 10px;"            
                 />
-                <a href="javascript:void(0)" @click="onNewBranch">New Branch</a>
+                <a href="javascript:void(0)" @click="onNewTheme">New Theme</a>
                     <hr />
                 <ul class="list-group overflow-auto">
-                    <li v-for="b in getAllBranches" :key="b._id" @click="onBranchFilled(b)">
-                        <a class="list-group-item">{{b.branch}}</a>
+                    <li v-for="t in getAllThemes" :key="t._id" @click="onThemeFilled(t)">
+                        <a class="list-group-item">{{t.theme}}</a>
                     </li>
                 </ul>
             </div>
             <div class="md-layout-item md-medium-size-70 md-small-size-50 md-xsmall-size-100">
                 <md-field>
-                    <label>Branch</label>
-                    <md-input v-model="branch"></md-input>
+                    <label>Theme</label>
+                    <md-input v-model="theme"></md-input>
                      <div
                         class="error"
-                        v-if="!$v.branch.required && submitStatus === 'ERROR'"
-                        >Branch Name is required</div>
+                        v-if="!$v.theme.required && submitStatus === 'ERROR'"
+                        >Theme Name is required</div>
                         <div
-                            v-if="!$v.branch.minLength && submitStatus === 'ERROR'"
+                            v-if="!$v.theme.minLength && submitStatus === 'ERROR'"
                             class="error"
-                        >Branch Name must have at least {{$v.branch.$params.minLength.min}} letters.</div>
+                        >Theme Name must have at least {{$v.theme.$params.minLength.min}} letters.</div>
                         <div
                             class="success-message"
                             v-if="submitStatus === 'UPDATED' "
-                        >Branch Updated successfully</div>
-                        <div class="success-message" v-if="submitStatus === 'ADDED' ">Branch Added successfully</div>
+                        >Theme Updated successfully</div>
+                        <div class="success-message" v-if="submitStatus === 'ADDED' ">Theme Added successfully</div>
                         <div
                             class="success-message"
                             v-if="submitStatus === 'DELETED' "
-                        >Branch Deleted successfully</div>
-                    <div class="error" v-if="submitStatus === 'UPDATION ERROR'">Invalid Branch Name</div>            
+                        >Theme Deleted successfully</div>
+                    <div class="error" v-if="submitStatus === 'UPDATION ERROR'">Invalid Theme Name</div>            
                 </md-field>
                 <md-card-actions v-if="showActionButtons">
-                    <md-button @click="updateBranch" type="submit" class="md-primary">Update</md-button>
-                    <md-button @click="deleteBranch" type="submit" class="md-primary">Delete</md-button>
+                    <md-button @click="updateTheme" type="submit" class="md-primary">Update</md-button>
+                    <md-button @click="deleteTheme" type="submit" class="md-primary">Delete</md-button>
                     </md-card-actions>
                 <md-card-actions v-else>
-                    <md-button @click="addNewBranch" type="submit" class="md-primary">Add Branch</md-button>
+                    <md-button @click="addNewTheme" type="submit" class="md-primary">Add Theme</md-button>
                 </md-card-actions>
             </div>
         </div>
@@ -61,60 +61,60 @@ import GlobalService from "../services/global-service";
 import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
-    name: "Branch",
+    name: "Theme",
     data() {
         return {
-            getAllBranches: undefined,
+            getAllThemes: undefined,
             loader: false,
-            branch: undefined,
+            theme: undefined,
             showActionButtons: false,
             search: undefined,
             filtered: undefined,
-            branchId: undefined,
+            themeId: undefined,
             submitStatus: "",
             errMsg: ''
         }
     },
     async created() {
-        this.fetchAllBranches();
+        this.fetchAllThemes();
     },
     methods: {
-        filterBranch() {
+        filterTheme() {
             if (this.search.length > 1) {
-                GlobalService.search('branch', this.search).then((res) => {
+                GlobalService.search('theme', this.search).then((res) => {
                 const filtering = res.filter(filterRes => filterRes.confidenceScore > 3.5)
-                this.getAllBranches = filtering;
+                this.getAllThemes = filtering;
                 });
             } else {
                 this.fetchAllCountries();
             }
         },
-        onNewBranch() {
+        onNewTheme() {
             this.submitStatus = "";
             this.showActionButtons = false;
-            this.branch = "";
+            this.theme = "";
         },
-        fetchAllBranches() {
+        fetchAllThemes() {
             this.loader = true;
-            GlobalService.get('branch')
+            GlobalService.get('theme')
                 .then((res) => {
                     console.log(res)
                     this.loader = false;
-                    this.getAllBranches = res;
+                    this.getAllThemes = res;
                 })
                 .catch(() => {
                     this.loader = false;
                 }
             );
         },
-        addNewBranch() {
+        addNewTheme() {
             this.loader = true;
-            GlobalService.add('branch', this.branch)
+            GlobalService.add('theme', this.theme)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "ADDED";
-                    this.fetchAllBranches();
-                    this.branch = "";
+                    this.fetchAllThemes();
+                    this.theme = "";
                 })
                 .catch(() => {
                     this.loader = false;
@@ -122,19 +122,19 @@ export default {
                 }
             );
         },
-        onBranchFilled(b) {
+        onThemeFilled(t) {
             this.showActionButtons = true;
             this.submitStatus = "";
-            this.branchId = b._id;
-            this.branch = b.branch;
+            this.themeId = t._id;
+            this.theme = t.theme;
         },
-        updateBranch() {
+        updateTheme() {
             this.loader = true;
-            GlobalService.update('branch', this.branchId, this.branch)
+            GlobalService.update('theme', this.themeId, this.theme)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "UPDATED";
-                    this.fetchAllBranches();
+                    this.fetchAllThemes();
                 })
                 .catch(() => {
                     this.loader = false;
@@ -142,15 +142,15 @@ export default {
                 }
             );
         },
-        deleteBranch() {
+        deleteTheme() {
             this.loader = true;
-            GlobalService.delete('branch', this.branchId)
+            GlobalService.delete('theme', this.themeId)
                 .then(() => {
                     this.showActionButtons = false;
                     this.loader = false;
                     this.submitStatus = "DELETED";
-                    this.fetchAllBranches();
-                    this.branch = "";
+                    this.fetchAllThemes();
+                    this.theme = "";
                 })
                 .catch(() => {
                     this.loader = false;
@@ -160,7 +160,7 @@ export default {
         },
     },
     validations: {
-        branch: {
+        theme: {
             required,
             minLength: minLength(2),
         },

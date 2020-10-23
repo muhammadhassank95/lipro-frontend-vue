@@ -5,6 +5,7 @@ import ConsultantPlan from '../views/ConsultantPlan';
 import User from '../views/User';
 import Country from '../views/Country';
 import Branch from '../views/Branch';
+import Theme from '../views/Theme';
 
 import PageNotFound from '../components/PageNotFound'
 import ResetPassword from '../components/ResetPassword'
@@ -59,6 +60,12 @@ const routes = [{
         path: '/branch',
         name: 'branch',
         component: Branch,
+        beforeEnter: guardMyroute,
+    },
+    {
+        path: '/theme',
+        name: 'theme',
+        component: Theme,
         beforeEnter: guardMyroute,
     },
     {
