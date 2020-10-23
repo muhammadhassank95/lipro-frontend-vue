@@ -8,7 +8,7 @@
       <div class="white-block">
         <md-field>
           <label>Login Name</label>
-          <md-input v-model="loginname"></md-input>
+          <md-input placeholder="Enter Login Name" v-model="loginname"></md-input>
           <div
             class="error"
             v-if="!$v.loginname.required && submitStatus === 'ERROR'"
@@ -21,7 +21,7 @@
 
         <md-field>
           <label>Password</label>
-          <md-input type="password" v-model="password"></md-input>
+          <md-input  placeholder="Enter Password" type="password" v-model="password"></md-input>
           <div
             class="error"
             v-if="!$v.password.required && submitStatus === 'ERROR'"
@@ -33,10 +33,8 @@
         </md-field>
       </div>
       <div v-if="submitStatus === 'ERROR'" class="error-form">{{ errorMessage }}</div>
-
       <div v-if="sendEmail && submitStatus === 'EMAIL SENT'" class="success-form"> {{ emailSentText }} </div>
       <div v-if="sendEmail && submitStatus === 'ERROR EMAIL SENT'" class="error-form"> {{ emailSentText }} </div>
-      
       <md-dialog-prompt
         :md-active.sync="toOpenModal"
         v-model="sendEmail"

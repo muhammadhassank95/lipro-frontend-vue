@@ -59,6 +59,11 @@ export default {
         type: undefined,
     }
   },
+  mounted() {
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("headerTitlePassed");
+  },
   methods: {
     onSave() {
       UserService.resetPasswordApi(this.password, this.param.token)

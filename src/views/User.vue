@@ -39,7 +39,7 @@
                   aria-label="Username"
                   aria-describedby="basic-addon1"
                   disabled
-                  :value="firstname + ' ' + lastname"
+                  :value="toShowFullName"
                 />
               </div>
               <form class="md-layout">
@@ -233,6 +233,7 @@ export default {
   },
   data() {
     return {
+      toShowFullName: '',
       lastname: "",
       firstname: "",
       salutation: undefined,
@@ -265,7 +266,7 @@ export default {
   },
   async mounted() {
     this.fetchAllUsers();
-    this.countries = await GlobalService.getCountries();
+    this.countries = await GlobalService.get('country');
   },
   methods: {
     async fetchAllUsers() {
@@ -291,6 +292,7 @@ export default {
     onNewUser() {
       this.isUpdateClick = false;
       this.onUserTabClicked();
+      this.toShowFullName = '';
       this.showActionButtons = false;
       this.email = undefined;
       this.firstname = "";
@@ -312,6 +314,7 @@ export default {
     },
     onUserFilled(user) {
       this.isUpdateClick = true;
+      this.toShowFullName = user.firstname + ' ' + user.lastname;
       this.userId = user._id;
       this.showActionButtons = true;
       this.email = user.mail;
@@ -366,7 +369,6 @@ export default {
         });
     },
     updateUser() {
-      // this.$v.$touch();
       this.loader = true;
       UserService.updateUserApi(
         this.userId,
@@ -391,8 +393,9 @@ export default {
           this.loader = false;
           this.isUpdateClick = true;
           this.submitStatus = "UPDATED";
+          this.toShowFullName = this.firstname + ' ' + this.lastname;
           this.fetchAllUsers();
-          this.onNewUser();
+          // this.onNewUser();
         })
         .catch((e) => {
           console.log(e)

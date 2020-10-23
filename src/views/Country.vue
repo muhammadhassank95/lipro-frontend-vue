@@ -83,7 +83,8 @@ export default {
     filterCountry() {
       if (this.search.length > 1) {
         GlobalService.search('country', this.search).then((res) => {
-          this.getAllCountries = res;
+          const filtering = res.filter(filterRes => filterRes.confidenceScore > 3.5)
+          this.getAllCountries = filtering;
         });
       } else {
         this.fetchAllCountries();
