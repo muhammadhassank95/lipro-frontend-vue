@@ -13,8 +13,10 @@
                 />
                 <a href="javascript:void(0)" @click="onNewBranch">New Branch</a>
                     <hr />
+
                 <ul class="list-group overflow-auto">
-                    <li v-for="b in getAllBranches" :key="b._id" @click="onBranchFilled(b)">
+                    <span v-if="emptySearchResults">{{ emptySearchResults }}</span>
+                    <li v-else v-for="b in getAllBranches" :key="b._id" @click="onBranchFilled(b)">
                         <a class="list-group-item">{{b.branch}}</a>
                     </li>
                 </ul>
@@ -72,7 +74,8 @@ export default {
             filtered: undefined,
             branchId: undefined,
             submitStatus: "",
-            errMsg: ''
+            errMsg: '',
+            emptySearchResults: ''
         }
     },
     async created() {
@@ -82,8 +85,11 @@ export default {
         filterBranch() {
             if (this.search.length > 1) {
                 GlobalService.search('branch', this.search).then((res) => {
-                const filtering = res.filter(filterRes => filterRes.confidenceScore > 3.5)
-                this.getAllBranches = filtering;
+                    if (res.length === 0) {
+                        this.emptySearchResults = 'Search result is empty.'
+                    } else {
+                        this.getAllBranches = res;
+                    }
                 });
             } else {
                 this.fetchAllCountries();
