@@ -98,7 +98,6 @@ export default {
             this.loader = true;
             GlobalService.get('branch')
                 .then((res) => {
-                    console.log(res)
                     this.loader = false;
                     this.getAllBranches = res;
                 })

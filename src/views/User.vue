@@ -362,8 +362,7 @@ export default {
           this.loader = false;
           this.fetchAllUsers();
         })
-        .catch((e) => {
-          console.log(e)
+        .catch(() => {
           this.loader = false;
           this.submitStatus = "ERROR";
         });
@@ -398,7 +397,6 @@ export default {
           // this.onNewUser();
         })
         .catch((e) => {
-          console.log(e)
           this.loader = false;
           this.submitStatus = "UPDATION ERROR";
           this.updationErr = e.body.message;

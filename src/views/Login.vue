@@ -83,7 +83,6 @@ export default {
           this.submitStatus = 'EMAIL SENT';
         })
         .catch((e) => {
-          console.log(e);
           this.submitStatus = 'ERROR EMAIL SENT';
           this.emailSentText = e.body.message;
         });

@@ -98,7 +98,6 @@ export default {
             this.loader = true;
             GlobalService.get('theme')
                 .then((res) => {
-                    console.log(res)
                     this.loader = false;
                     this.getAllThemes = res;
                 })
