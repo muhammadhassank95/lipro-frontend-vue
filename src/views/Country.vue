@@ -89,7 +89,7 @@ export default {
           if (res.length === 0) {
               this.emptySearchResults = 'Search result is empty.'
           } else {
-              this.getAllBranches = res;
+              this.getAllCountries = res;
           }
         });
       } else {

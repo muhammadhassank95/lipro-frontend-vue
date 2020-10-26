@@ -14,7 +14,8 @@
                 <a href="javascript:void(0)" @click="onNewTheme">New Theme</a>
                     <hr />
                 <ul class="list-group overflow-auto">
-                    <li v-for="t in getAllThemes" :key="t._id" @click="onThemeFilled(t)">
+                    <span v-if="emptySearchResults">{{ emptySearchResults }}</span>
+                    <li v-else v-for="t in getAllThemes" :key="t._id" @click="onThemeFilled(t)">
                         <a class="list-group-item">{{t.theme}}</a>
                     </li>
                 </ul>
@@ -72,7 +73,8 @@ export default {
             filtered: undefined,
             themeId: undefined,
             submitStatus: "",
-            errMsg: ''
+            errMsg: '',
+            emptySearchResults
         }
     },
     async created() {
@@ -82,8 +84,11 @@ export default {
         filterTheme() {
             if (this.search.length > 1) {
                 GlobalService.search('theme', this.search).then((res) => {
-                const filtering = res.filter(filterRes => filterRes.confidenceScore > 3.5)
-                this.getAllThemes = filtering;
+                    if (res.length === 0) {
+                        this.emptySearchResults = 'Search result is empty.'
+                    } else {
+                        this.getAllThemes = res;
+                    }
                 });
             } else {
                 this.fetchAllCountries();
