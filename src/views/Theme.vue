@@ -74,7 +74,7 @@ export default {
             themeId: undefined,
             submitStatus: "",
             errMsg: '',
-            emptySearchResults
+            emptySearchResults: ''
         }
     },
     async created() {
