@@ -10,22 +10,39 @@ const GlobalService = {
     },
 
     add: (key, body) => {
-        let url = `${baseUrl}/${key}/add-new-${key}`
-        return doRequest(
-            "post",
-            url, {
-                [`${key}`]: body,
-            }
-        )
+        if(key === 'consultantFunction') {
+            return doRequest(
+                "post",
+                `${baseUrl}/${key}/add-new-${key}`, {
+                    _function: body,
+                }
+            );    
+        } else {
+            return doRequest(
+                "post",
+                `${baseUrl}/${key}/add-new-${key}`, {
+                    [`${key}`]: body,
+                }
+            )
+        }
     },
 
     update: (key, id, body) => {
-        return doRequest(
-            "put",
-            `${baseUrl}/${key}/update-${key}/${id}`, {
-                [`${key}`]: body,
-            }
-        );
+        if(key === 'consultantFunction') {
+            return doRequest(
+                "put",
+                `${baseUrl}/${key}/update-${key}/${id}`, {
+                    _function: body,
+                }
+            );    
+        } else {
+            return doRequest(
+                "put",
+                `${baseUrl}/${key}/update-${key}/${id}`, {
+                    [`${key}`]: body,
+                }
+            );
+        }
     },
 
     delete: (key,countryId) => {

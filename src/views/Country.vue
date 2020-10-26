@@ -14,7 +14,7 @@
         <a href="javascript:void(0)" @click="onNewCountry">New Country</a>
         <hr />
         <ul class="list-group overflow-auto">
-          <span v-if="emptySearchResults">{{ emptySearchResults }}</span>
+          <span v-if="emptySearchResults">Search result is empty.</span>
           <li v-else v-for="c in getAllCountries" :key="c._id" @click="onCountryFilled(c)">
             <a class="list-group-item">{{c.country}}</a>
           </li>
@@ -75,7 +75,7 @@ export default {
       submitStatus: "",
       loader: false,
       errMsg: '',
-      emptySearchResults: ''
+      emptySearchResults: false
     };
   },
   async created() {
@@ -87,12 +87,14 @@ export default {
         GlobalService.search('country', this.search).then((res) => {
           // const filtering = res.filter(filterRes => filterRes.confidenceScore > 3.5)
           if (res.length === 0) {
-              this.emptySearchResults = 'Search result is empty.'
+              this.emptySearchResults = true
           } else {
+              this.emptySearchResults = false
               this.getAllCountries = res;
           }
         });
       } else {
+        this.emptySearchResults = false
         this.fetchAllCountries();
       }
     },

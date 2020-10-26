@@ -2,11 +2,21 @@
   <div class="container-fluid">
     <div class="md-layout md-gutter mt-4">
       <div v-if="loader === false" class="md-layout-item md-medium-size-30 md-small-size-50 md-xsmall-size-100">
+        <input 
+          id="bd-search-input"
+          type="search"
+          placeholder="Search..."
+          class="form-control ds-input"
+          @blur="filterUser"
+          v-model="search"
+          style="position: relative; vertical-align: top; margin-top: 10px;"            
+        />
         <div class="card p-4 mb-3">
           <a href="javascript:void(0)" @click="onNewUser">New User</a>
           <hr />
           <ul>
-            <li v-for="users in getAllUsers" :key="users._id" @click="onUserFilled(users)">
+            <span v-if="emptySearchResults">Search result is empty.</span>
+            <li v-else v-for="users in getAllUsers" :key="users._id" @click="onUserFilled(users)">
               <a class="list-group-item">{{users.loginname}}</a>
             </li>
           </ul>
@@ -261,7 +271,9 @@ export default {
       isAccessRight: false,
       isCost: false,
       isUpdateClick: false,
-      updationErr: ''
+      updationErr: '',
+      search: '',
+      emptySearchResults: false
     };
   },
   async mounted() {
@@ -269,6 +281,21 @@ export default {
     this.countries = await GlobalService.get('country');
   },
   methods: {
+    filterUser() {
+      if (this.search.length > 1) {
+          UserService.search('user', this.search).then((res) => {
+              if (res.length === 0) {
+                  this.emptySearchResults = true;
+              } else {
+                  this.emptySearchResults = false;
+                  this.getAllUsers = res;
+              }
+          });
+      } else {
+          this.emptySearchResults = false
+          this.fetchAllUsers();
+      }
+    },
     async fetchAllUsers() {
       this.loader = true;
       this.getAllUsers = await UserService.getUsers();

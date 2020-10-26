@@ -125,6 +125,13 @@ const UserService = {
             }
         )
     },
+
+    search: (key, query) => {
+        return doRequest(
+            "get",
+            `${baseUrl}/auth/search-${key}/${query}`
+        );
+    },
 };
 
 export default UserService;

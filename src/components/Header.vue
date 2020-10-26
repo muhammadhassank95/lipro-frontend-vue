@@ -34,7 +34,8 @@
             <md-menu-content style="min-height:400px">
               <md-menu-item @click="onHeaderItemPressed('user')">Users</md-menu-item>
               <md-menu-item @click="onHeaderItemPressed('countries')">Countries</md-menu-item>
-              <md-menu-item>Constultant Functions</md-menu-item>
+              <md-menu-item>User Categories</md-menu-item>
+              <md-menu-item @click="onHeaderItemPressed('consultant funtions')">Constultant Functions</md-menu-item>
               <md-menu-item>Classifications</md-menu-item>
               <md-menu-item @click="onHeaderItemPressed('branches')">Branches</md-menu-item>
               <md-menu-item @click="onHeaderItemPressed('themes')">Themes</md-menu-item>
@@ -99,6 +100,11 @@ export default {
           localStorage.setItem("headerTitlePassed", "Theme");
           router.push("/theme");
           this.headerTitle = "Theme";
+          break;
+        case "consultant funtions":
+          localStorage.setItem("headerTitlePassed", "Consultant Funtions");
+          router.push("/consultant_funtions");
+          this.headerTitle = "Consultant Funtions";
           break;
       }
     },

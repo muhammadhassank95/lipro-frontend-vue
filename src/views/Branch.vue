@@ -15,7 +15,7 @@
                     <hr />
 
                 <ul class="list-group overflow-auto">
-                    <span v-if="emptySearchResults">{{ emptySearchResults }}</span>
+                    <span v-if="emptySearchResults">Search result is empty.</span>
                     <li v-else v-for="b in getAllBranches" :key="b._id" @click="onBranchFilled(b)">
                         <a class="list-group-item">{{b.branch}}</a>
                     </li>
@@ -75,7 +75,7 @@ export default {
             branchId: undefined,
             submitStatus: "",
             errMsg: '',
-            emptySearchResults: ''
+            emptySearchResults: false
         }
     },
     async created() {
@@ -86,12 +86,14 @@ export default {
             if (this.search.length > 1) {
                 GlobalService.search('branch', this.search).then((res) => {
                     if (res.length === 0) {
-                        this.emptySearchResults = 'Search result is empty.'
+                        this.emptySearchResults = true;
                     } else {
+                        this.emptySearchResults = false;
                         this.getAllBranches = res;
                     }
                 });
             } else {
+                this.emptySearchResults = false;
                 this.fetchAllCountries();
             }
         },

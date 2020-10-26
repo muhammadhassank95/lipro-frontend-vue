@@ -7,48 +7,49 @@
                     type="search"
                     placeholder="Search..."
                     class="form-control ds-input"
-                    @blur="filterTheme"
+                    @blur="filterFunction"
                     v-model="search"
                     style="position: relative; vertical-align: top; margin-top: 10px;"            
                 />
-                <a href="javascript:void(0)" @click="onNewTheme">New Theme</a>
+                <a href="javascript:void(0)" @click="onNewFunction">New Function</a>
                     <hr />
+
                 <ul class="list-group overflow-auto">
                     <span v-if="emptySearchResults">Search result is empty.</span>
-                    <li v-else v-for="t in getAllThemes" :key="t._id" @click="onThemeFilled(t)">
-                        <a class="list-group-item">{{t.theme}}</a>
+                    <li v-else v-for="b in getAllFunctions" :key="b._id" @click="onFunctionFilled(b)">
+                        <a class="list-group-item">{{b._function}}</a>
                     </li>
                 </ul>
             </div>
             <div class="md-layout-item md-medium-size-70 md-small-size-50 md-xsmall-size-100">
                 <md-field>
-                    <label>Theme</label>
-                    <md-input v-model="theme"></md-input>
+                    <label>Function</label>
+                    <md-input v-model="func"></md-input>
                      <div
                         class="error"
-                        v-if="!$v.theme.required && submitStatus === 'ERROR'"
-                        >Theme Name is required</div>
+                        v-if="!$v.func.required && submitStatus === 'ERROR'"
+                        >Function Name is required</div>
                         <div
-                            v-if="!$v.theme.minLength && submitStatus === 'ERROR'"
+                            v-if="!$v.func.minLength && submitStatus === 'ERROR'"
                             class="error"
-                        >Theme Name must have at least {{$v.theme.$params.minLength.min}} letters.</div>
+                        >Function Name must have at least {{$v.func.$params.minLength.min}} letters.</div>
                         <div
                             class="success-message"
                             v-if="submitStatus === 'UPDATED' "
-                        >Theme Updated successfully</div>
-                        <div class="success-message" v-if="submitStatus === 'ADDED' ">Theme Added successfully</div>
+                        >Function Updated successfully</div>
+                        <div class="success-message" v-if="submitStatus === 'ADDED' ">Function Added successfully</div>
                         <div
                             class="success-message"
                             v-if="submitStatus === 'DELETED' "
-                        >Theme Deleted successfully</div>
-                    <div class="error" v-if="submitStatus === 'UPDATION ERROR'">Invalid Theme Name</div>            
+                        >Function Deleted successfully</div>
+                    <div class="error" v-if="submitStatus === 'UPDATION ERROR'">Invalid Function Name</div>            
                 </md-field>
                 <md-card-actions v-if="showActionButtons">
-                    <md-button @click="updateTheme" type="submit" class="md-primary">Update</md-button>
-                    <md-button @click="deleteTheme" type="submit" class="md-primary">Delete</md-button>
+                    <md-button @click="updateFunction" type="submit" class="md-primary">Update</md-button>
+                    <md-button @click="deleteFunction" type="submit" class="md-primary">Delete</md-button>
                     </md-card-actions>
                 <md-card-actions v-else>
-                    <md-button @click="addNewTheme" type="submit" class="md-primary">Add Theme</md-button>
+                    <md-button @click="addNewFunction" type="submit" class="md-primary">Add Function</md-button>
                 </md-card-actions>
             </div>
         </div>
@@ -62,66 +63,65 @@ import GlobalService from "../services/global-service";
 import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
-    name: "Theme",
+    name: "Function",
     data() {
         return {
-            getAllThemes: undefined,
+            getAllFunctions: undefined,
             loader: false,
-            theme: undefined,
+            func: undefined,
             showActionButtons: false,
             search: undefined,
             filtered: undefined,
-            themeId: undefined,
+            functionId: undefined,
             submitStatus: "",
             errMsg: '',
             emptySearchResults: false
         }
     },
     async created() {
-        this.fetchAllThemes();
+        this.fetchAllFunctions();
     },
     methods: {
-        filterTheme() {
+        filterFunction() {
             if (this.search.length > 1) {
-                GlobalService.search('theme', this.search).then((res) => {
+                GlobalService.search('consultantFunction', this.search).then((res) => {
                     if (res.length === 0) {
-                        this.emptySearchResults = true
+                        this.emptySearchResults = true;
                     } else {
-                        this.emptySearchResults = false
-
-                        this.getAllThemes = res;
+                        this.emptySearchResults = false;
+                        this.getAllFunctions = res;
                     }
                 });
             } else {
-                this.emptySearchResults = false
-                this.fetchAllThemes();
+                this.emptySearchResults = false;
+                this.fetchAllFunctions();
             }
         },
-        onNewTheme() {
+        onNewFunction() {
             this.submitStatus = "";
             this.showActionButtons = false;
-            this.theme = "";
+            this.func = "";
         },
-        fetchAllThemes() {
+        fetchAllFunctions() {
             this.loader = true;
-            GlobalService.get('theme')
+            GlobalService.get('consultantFunction')
                 .then((res) => {
                     this.loader = false;
-                    this.getAllThemes = res;
+                    this.getAllFunctions = res;
                 })
                 .catch(() => {
                     this.loader = false;
                 }
             );
         },
-        addNewTheme() {
+        addNewFunction() {
             this.loader = true;
-            GlobalService.add('theme', this.theme)
+            GlobalService.add('consultantFunction', this.func)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "ADDED";
-                    this.fetchAllThemes();
-                    this.theme = "";
+                    this.fetchAllFunctions();
+                    this.func = "";
                 })
                 .catch(() => {
                     this.loader = false;
@@ -129,19 +129,19 @@ export default {
                 }
             );
         },
-        onThemeFilled(t) {
+        onFunctionFilled(b) {
             this.showActionButtons = true;
             this.submitStatus = "";
-            this.themeId = t._id;
-            this.theme = t.theme;
+            this.functionId = b._id;
+            this.func = b._function;
         },
-        updateTheme() {
+        updateFunction() {
             this.loader = true;
-            GlobalService.update('theme', this.themeId, this.theme)
+            GlobalService.update('consultantFunction', this.functionId, this.func)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "UPDATED";
-                    this.fetchAllThemes();
+                    this.fetchAllFunctions();
                 })
                 .catch(() => {
                     this.loader = false;
@@ -149,15 +149,15 @@ export default {
                 }
             );
         },
-        deleteTheme() {
+        deleteFunction() {
             this.loader = true;
-            GlobalService.delete('theme', this.themeId)
+            GlobalService.delete('consultantFunction', this.functionId)
                 .then(() => {
                     this.showActionButtons = false;
                     this.loader = false;
                     this.submitStatus = "DELETED";
-                    this.fetchAllThemes();
-                    this.theme = "";
+                    this.fetchAllFunctions();
+                    this.func = "";
                 })
                 .catch(() => {
                     this.loader = false;
@@ -167,7 +167,7 @@ export default {
         },
     },
     validations: {
-        theme: {
+        func: {
             required,
             minLength: minLength(2),
         },
