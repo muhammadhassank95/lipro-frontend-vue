@@ -7,6 +7,7 @@ import Country from '../views/Country';
 import Branch from '../views/Branch';
 import Theme from '../views/Theme';
 import ConsultantFuntion from '../views/ConsultantFuntion';
+import Classification from '../views/Classification';
 
 import PageNotFound from '../components/PageNotFound'
 import ResetPassword from '../components/ResetPassword'
@@ -73,6 +74,12 @@ const routes = [{
         path: '/consultant_funtions',
         name: 'Consultant Funtions',
         component: ConsultantFuntion,
+        beforeEnter: guardMyroute,
+    },
+    {
+        path: '/classification',
+        name: 'classification',
+        component: Classification,
         beforeEnter: guardMyroute,
     },
     {

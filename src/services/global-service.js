@@ -27,6 +27,26 @@ const GlobalService = {
         }
     },
 
+    addClassificationApi: (key, classfication, probability) => {
+        return doRequest(
+            "post",
+            `${baseUrl}/${key}/add-new-${key}`, {
+                [`${key}`]: classfication,
+                probability: probability
+            }
+        )
+    },
+
+    updateClassificationApi: (key, id, classfication, probability) => {
+        return doRequest(
+            "put",
+            `${baseUrl}/${key}/update-${key}/${id}`, {
+                [`${key}`]: classfication,
+                probability: probability
+            }
+        );    
+    },
+
     update: (key, id, body) => {
         if(key === 'consultantFunction') {
             return doRequest(

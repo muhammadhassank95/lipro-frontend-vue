@@ -85,7 +85,6 @@ export default {
     filterCountry() {
       if (this.search.length > 1) {
         GlobalService.search('country', this.search).then((res) => {
-          // const filtering = res.filter(filterRes => filterRes.confidenceScore > 3.5)
           if (res.length === 0) {
               this.emptySearchResults = true
           } else {

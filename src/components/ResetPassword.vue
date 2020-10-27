@@ -14,7 +14,7 @@
         >Password is required.</div>
         <div
           class="error"
-          v-if="!$v.password.minLength && submitStatus === 'ERROR'"
+          v-if="!$v.password.minLength"
         >Password must have at least {{ $v.password.$params.minLength.min }} letters.</div>
       
       </md-field>
