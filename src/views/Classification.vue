@@ -35,15 +35,16 @@
                         >Classification Name must have at least {{$v.classification.$params.minLength.min}} letters.</div>
                 </md-field>
                 <md-field>
-                    <label>Probability</label>
+                    <label>Probability (%)</label>
                     <md-input v-model="probability"></md-input>
+                    <md-icon>%</md-icon>
                     <div
                         class="error"
                         v-if="!$v.probability.required && submitStatus === 'ERROR'"
                         >Probability Name is required</div>
                     <div 
                         class="error"
-                        v-if="!$v.probability.between && submitStatus === 'ERROR'"
+                        v-if="!$v.probability.between"
                     >Probability must be number between 1-100
                     </div>
                     <div
