@@ -139,6 +139,7 @@ export default {
                     this.submitStatus = "ADDED";
                     this.fetchAllclassifications();
                     this.classification = "";
+                    this.probability = "";
                 })
                 .catch(() => {
                     this.loader = false;
