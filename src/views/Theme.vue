@@ -82,7 +82,7 @@ export default {
     },
     methods: {
         filterTheme() {
-            if (this.search.length > 1) {
+            if (this.search.length > 0) {
                 GlobalService.search('theme', this.search).then((res) => {
                     if (res.length === 0) {
                         this.emptySearchResults = true
@@ -116,7 +116,12 @@ export default {
         },
         addNewTheme() {
             this.loader = true;
-            GlobalService.add('theme', this.theme)
+
+            let body = {
+                theme: this.theme
+            }
+
+            GlobalService.add('theme', body)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "ADDED";
@@ -137,7 +142,10 @@ export default {
         },
         updateTheme() {
             this.loader = true;
-            GlobalService.update('theme', this.themeId, this.theme)
+            let body = {
+                theme: this.theme
+            } 
+            GlobalService.update('theme', this.themeId, body)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "UPDATED";

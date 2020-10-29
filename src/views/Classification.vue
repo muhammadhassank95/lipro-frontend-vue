@@ -41,7 +41,7 @@
                     <div
                         class="error"
                         v-if="!$v.probability.required && submitStatus === 'ERROR'"
-                        >Probability Name is required</div>
+                        >Probability is required</div>
                     <div 
                         class="error"
                         v-if="!$v.probability.between"
@@ -61,7 +61,7 @@
                 <md-card-actions v-if="showActionButtons">
                     <md-button @click="updateClassification" type="submit" class="md-primary">Update</md-button>
                     <md-button @click="deleteClassification" type="submit" class="md-primary">Delete</md-button>
-                    </md-card-actions>
+                </md-card-actions>
                 <md-card-actions v-else>
                     <md-button @click="addNewClassification" type="submit" class="md-primary">Add Classification</md-button>
                 </md-card-actions>
@@ -94,11 +94,11 @@ export default {
         }
     },
     async created() {
-        this.fetchAllclassifications();
+        this.fetchAllClassifications();
     },
     methods: {
         filterClassification() {
-            if (this.search.length > 1) {
+            if (this.search.length > 0) {
                 GlobalService.search('classification', this.search).then((res) => {
                     if (res.length === 0) {
                         this.emptySearchResults = true;
@@ -109,7 +109,7 @@ export default {
                 });
             } else {
                 this.emptySearchResults = false;
-                this.fetchAllclassifications();
+                this.fetchAllClassifications();
             }
         },
         onNewClassification() {
@@ -119,7 +119,7 @@ export default {
             this.probability = "";
 
         },
-        fetchAllclassifications() {
+        fetchAllClassifications() {
             this.loader = true;
             GlobalService.get('classification')
                 .then((res) => {
@@ -133,11 +133,15 @@ export default {
         },
         addNewClassification() {
             this.loader = true;
-            GlobalService.addClassificationApi('classification', this.classification, this.probability)
+            let body = {
+                classification: this.classfication,
+                probability: this.probability
+            }
+            GlobalService.add('classification', body)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "ADDED";
-                    this.fetchAllclassifications();
+                    this.fetchAllClassifications();
                     this.classification = "";
                     this.probability = "";
                 })
@@ -156,11 +160,15 @@ export default {
         },
         updateClassification() {
             this.loader = true;
-            GlobalService.updateClassificationApi('classification', this.classificationId, this.classification, this.probability)
+            let body = {
+                classification: this.classfication,
+                probability: this.probability
+            }
+            GlobalService.update('classification', this.classificationId, body)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "UPDATED";
-                    this.fetchAllclassifications();
+                    this.fetchAllClassifications();
                 })
                 .catch(() => {
                     this.loader = false;
@@ -175,7 +183,7 @@ export default {
                     this.showActionButtons = false;
                     this.loader = false;
                     this.submitStatus = "DELETED";
-                    this.fetchAllclassifications();
+                    this.fetchAllClassifications();
                     this.classification = "";
                     this.probability = "";
                 })

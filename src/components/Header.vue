@@ -40,7 +40,7 @@
               <md-menu-item @click="onHeaderItemPressed('branches')">Branches</md-menu-item>
               <md-menu-item @click="onHeaderItemPressed('themes')">Themes</md-menu-item>
               <md-menu-item>Public Holidays</md-menu-item>
-              <md-menu-item>System Settings</md-menu-item>
+              <md-menu-item @click="onHeaderItemPressed('system')">System Settings</md-menu-item>
             </md-menu-content>
           </md-menu>
         </div>
@@ -110,6 +110,11 @@ export default {
           localStorage.setItem("headerTitlePassed", "Classifications");
           router.push("/classification");
           this.headerTitle = "Classifications";
+          break;
+        case "system":
+          localStorage.setItem("headerTitlePassed", "System Settings");
+          router.push("/system-settings");
+          this.headerTitle = "System Settings";
           break;
       }
     },

@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     filterCountry() {
-      if (this.search.length > 1) {
+      if (this.search.length > 0) {
         GlobalService.search('country', this.search).then((res) => {
           if (res.length === 0) {
               this.emptySearchResults = true
@@ -110,7 +110,10 @@ export default {
     },
     addNewCountry() {
       this.loader = true;
-      GlobalService.add('country', this.country)
+      let body = {
+        country: this.country
+      }
+      GlobalService.add('country', body)
         .then(() => {
           this.loader = false;
           this.submitStatus = "ADDED";
@@ -135,7 +138,10 @@ export default {
     },
     updateCountry() {
       this.loader = true;
-      GlobalService.update('country', this.countryId, this.country)
+      let body = {
+          country: this.country
+      }
+      GlobalService.update('country', this.countryId, body)
         .then(() => {
           this.loader = false;
           this.submitStatus = "UPDATED";

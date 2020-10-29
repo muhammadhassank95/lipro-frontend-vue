@@ -83,7 +83,7 @@ export default {
     },
     methods: {
         filterBranch() {
-            if (this.search.length > 1) {
+            if (this.search.length > 0) {
                 GlobalService.search('branch', this.search).then((res) => {
                     if (res.length === 0) {
                         this.emptySearchResults = true;
@@ -116,7 +116,10 @@ export default {
         },
         addNewBranch() {
             this.loader = true;
-            GlobalService.add('branch', this.branch)
+            let body = {
+                branch: this.branch
+            }
+            GlobalService.add('branch', body)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "ADDED";
@@ -137,7 +140,10 @@ export default {
         },
         updateBranch() {
             this.loader = true;
-            GlobalService.update('branch', this.branchId, this.branch)
+            let body = {
+                branch: this.branch
+            } 
+            GlobalService.update('branch', this.branchId, body)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "UPDATED";

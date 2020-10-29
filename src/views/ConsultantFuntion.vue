@@ -83,7 +83,7 @@ export default {
     },
     methods: {
         filterFunction() {
-            if (this.search.length > 1) {
+            if (this.search.length > 0) {
                 GlobalService.search('consultantFunction', this.search).then((res) => {
                     if (res.length === 0) {
                         this.emptySearchResults = true;
@@ -116,7 +116,10 @@ export default {
         },
         addNewFunction() {
             this.loader = true;
-            GlobalService.add('consultantFunction', this.func)
+            let body = {
+                consultantFunction: this.func
+            }
+            GlobalService.add('consultantFunction', body)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "ADDED";
@@ -137,7 +140,10 @@ export default {
         },
         updateFunction() {
             this.loader = true;
-            GlobalService.update('consultantFunction', this.functionId, this.func)
+            let body = {
+                _function: this.func
+            }
+            GlobalService.update('consultantFunction', this.functionId, body)
                 .then(() => {
                     this.loader = false;
                     this.submitStatus = "UPDATED";

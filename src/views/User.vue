@@ -282,7 +282,7 @@ export default {
   },
   methods: {
     filterUser() {
-      if (this.search.length > 1) {
+      if (this.search.length > 0) {
           UserService.search('user', this.search).then((res) => {
               if (res.length === 0) {
                   this.emptySearchResults = true;

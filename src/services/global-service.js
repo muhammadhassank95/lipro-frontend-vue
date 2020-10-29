@@ -10,59 +10,17 @@ const GlobalService = {
     },
 
     add: (key, body) => {
-        if(key === 'consultantFunction') {
-            return doRequest(
-                "post",
-                `${baseUrl}/${key}/add-new-${key}`, {
-                    _function: body,
-                }
-            );    
-        } else {
-            return doRequest(
-                "post",
-                `${baseUrl}/${key}/add-new-${key}`, {
-                    [`${key}`]: body,
-                }
-            )
-        }
-    },
-
-    addClassificationApi: (key, classfication, probability) => {
         return doRequest(
             "post",
-            `${baseUrl}/${key}/add-new-${key}`, {
-                [`${key}`]: classfication,
-                probability: probability
-            }
-        )
-    },
-
-    updateClassificationApi: (key, id, classfication, probability) => {
-        return doRequest(
-            "put",
-            `${baseUrl}/${key}/update-${key}/${id}`, {
-                [`${key}`]: classfication,
-                probability: probability
-            }
-        );    
+            `${baseUrl}/${key}/add-new-${key}`, body
+        ); 
     },
 
     update: (key, id, body) => {
-        if(key === 'consultantFunction') {
-            return doRequest(
-                "put",
-                `${baseUrl}/${key}/update-${key}/${id}`, {
-                    _function: body,
-                }
-            );    
-        } else {
-            return doRequest(
-                "put",
-                `${baseUrl}/${key}/update-${key}/${id}`, {
-                    [`${key}`]: body,
-                }
-            );
-        }
+        return doRequest(
+            "put",
+            `${baseUrl}/${key}/update-${key}/${id}`, body
+        );
     },
 
     delete: (key,countryId) => {
