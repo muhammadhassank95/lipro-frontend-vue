@@ -29,15 +29,13 @@ const GlobalService = {
             `${baseUrl}/${key}/delete-${key}/${countryId}`
         );
     },
-
-    
+  
     search: (key, query) => {
         return doRequest(
             "get",
             `${baseUrl}/${key}/search-${key}/${query}`
         );
     },
-
 };
 
 export default GlobalService;

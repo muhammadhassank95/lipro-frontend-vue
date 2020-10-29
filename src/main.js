@@ -3,6 +3,7 @@ import App from './App.vue';
 
 // router
 import router from './router';
+import store from './store';
 
 //metarial ui vue
 import 'vue-material/dist/vue-material.min.css';
@@ -35,5 +36,6 @@ Vue.use(VueMaterial);
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app');

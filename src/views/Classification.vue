@@ -134,7 +134,7 @@ export default {
         addNewClassification() {
             this.loader = true;
             let body = {
-                classification: this.classfication,
+                classification: this.classification,
                 probability: this.probability
             }
             GlobalService.add('classification', body)

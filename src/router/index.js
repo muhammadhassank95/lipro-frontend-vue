@@ -8,6 +8,7 @@ import Branch from '../views/Branch';
 import Theme from '../views/Theme';
 import ConsultantFuntion from '../views/ConsultantFuntion';
 import Classification from '../views/Classification';
+import SystemSetting from '../views/SystemSetting';
 
 import PageNotFound from '../components/PageNotFound'
 import ResetPassword from '../components/ResetPassword'
@@ -80,6 +81,12 @@ const routes = [{
         path: '/classification',
         name: 'classification',
         component: Classification,
+        beforeEnter: guardMyroute,
+    },
+    {
+        path: '/system-settings',
+        name: 'System Settings',
+        component: SystemSetting,
         beforeEnter: guardMyroute,
     },
     {
