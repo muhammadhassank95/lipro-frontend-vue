@@ -38,13 +38,6 @@ const GlobalService = {
         );
     },
 
-    // searchCountry: (query) => {
-    //     return doRequest(
-    //         "get",
-    //         `${baseUrl}/country/search-country/${query}`
-    //     );
-    // },
-
 };
 
 export default GlobalService;
