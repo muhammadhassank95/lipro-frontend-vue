@@ -22,11 +22,11 @@
         <div
           class="error"
           v-if="!$v.toleranceplaning.required && submitStatus === 'ERROR'"
-        >Tolerance Planing required</div>
+        >Tolerance Planning required</div>
         <div
           class="error"
           v-if="!$v.toleranceplaning.between"
-        >Tolerance Planing should be between -100-100</div> 
+        >Tolerance Planning should be between -100-100</div> 
       </md-field>
       <md-field>
         <label>Hours recording booking after X days in the past month (standard)</label>
